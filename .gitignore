@@ -1,0 +1,6 @@
+# SOPS config should be tracked
+.sops.yaml
+
+# Decrypted temp files
+.decrypted~*
+*.decrypted~*
