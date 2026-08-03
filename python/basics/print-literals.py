@@ -16,3 +16,7 @@ print('I like "Steak"') # This is a string literal with a double quote character
 # If you start a string with an apostrophe, you have to end it with an apostrophe.
 
 print('I\'m The Jammy Project.') # This is a string literal with an escaped apostrophe character.
+
+print(True > False) # This is a boolean literal with a (decimal) value equal to 1.
+print(True < False) # This is a boolean literal with a (decimal) value equal to 0.
+
