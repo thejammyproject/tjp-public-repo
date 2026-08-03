@@ -14,3 +14,5 @@ print('I like "Steak"') # This is a string literal with a double quote character
 # If you open a string with a quote, you have to close it with a quote.
 
 # If you start a string with an apostrophe, you have to end it with an apostrophe.
+
+print('I\'m The Jammy Project.') # This is a string literal with an escaped apostrophe character.
