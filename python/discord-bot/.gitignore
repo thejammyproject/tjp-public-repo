@@ -1,0 +1,16 @@
+# Runtime secrets are materialized from SOPS/Kubernetes.
+.env
+
+# Generated runtime data.
+__pycache__/
+*.py[cod]
+*.py_old
+*.log
+lostark/logs/
+lostark/sql/
+
+# Local credentials and editor files.
+.ssh/
+.tls/
+.vscode/
+.idea/
