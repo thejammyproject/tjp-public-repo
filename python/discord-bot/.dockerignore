@@ -1,0 +1,8 @@
+.git
+.ssh
+.tls
+.env
+__pycache__
+*.py[cod]
+*.log
+lostark/sql
