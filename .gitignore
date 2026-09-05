@@ -4,3 +4,13 @@
 # Decrypted temp files
 .decrypted~*
 *.decrypted~*
+
+# Plaintext credentials and private keys must be stored through SOPS.
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Runtime output may contain addresses, requests, or tokens.
+*.log
