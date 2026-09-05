@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thejammyproject
+  namespace: platform-apps
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: thejammyproject
+  template:
+    metadata:
+      labels:
+        app: thejammyproject
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: thejammyproject
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - name: website
+          image: jammyuk/thejammyproject-website:v1.12@sha256:eb6bd7880d0125906652ca5237d43718c71eb8770b595e672d7026c5c1c1d67a
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          readinessProbe:
+            httpGet: { path: /, port: http }
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /, port: http }
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 10m, memory: 16Mi }
+            limits: { cpu: 100m, memory: 64Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: thejammyproject
+  namespace: platform-apps
+spec:
+  selector:
+    app: thejammyproject
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: thejammyproject-internal
+  namespace: platform-apps
+spec:
+  secretName: thejammyproject-internal-tls
+  duration: 8760h
+  renewBefore: 720h
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+    rotationPolicy: Always
+  dnsNames:
+    - thejammyproject.internal
+  issuerRef:
+    name: local-platform-ca
+    kind: Issuer
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: thejammyproject
+  namespace: platform-apps
+spec:
+  ingressClassName: traefik
+  tls:
+    - secretName: thejammyproject-internal-tls
+      hosts:
+        - thejammyproject.internal
+  rules:
+    - host: thejammyproject.internal
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: thejammyproject
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: thejammyproject-ingress
+  namespace: platform-apps
+spec:
+  podSelector:
+    matchLabels:
+      app: thejammyproject
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: TCP
+          port: 80
