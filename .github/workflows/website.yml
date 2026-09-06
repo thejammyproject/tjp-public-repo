@@ -1,13 +1,13 @@
-name: Build Discord bot
+name: Build website
 
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - python/discord-bot/**
+      - website/thejammyproject/**
       - .dockerignore
-      - .github/workflows/discord-bot.yml
+      - .github/workflows/website.yml
 
 permissions:
   contents: write
@@ -34,18 +34,18 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: python/discord-bot/Dockerfile
+          file: website/thejammyproject/Dockerfile
           push: true
-          tags: jammyuk/tjp-discord-bot:${{ github.sha }}
+          tags: jammyuk/thejammyproject-website:${{ github.sha }}
 
       - name: Pin the deployed image digest
         env:
-          IMAGE: jammyuk/tjp-discord-bot@${{ steps.build.outputs.digest }}
+          IMAGE: jammyuk/thejammyproject-website@${{ steps.build.outputs.digest }}
         run: |
-          sed -i "s|image: jammyuk/tjp-discord-bot.*|image: ${IMAGE}|" deploy/k8s/discord-bot/deployment.yaml
+          sed -i "s|image: jammyuk/thejammyproject-website.*|image: ${IMAGE}|" deploy/k8s/thejammyproject/current-site.yaml
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add deploy/k8s/discord-bot/deployment.yaml
-          git diff --cached --quiet || git commit -m "Deploy Discord bot ${GITHUB_SHA::12} [skip ci]"
+          git add deploy/k8s/thejammyproject/current-site.yaml
+          git diff --cached --quiet || git commit -m "Deploy website ${GITHUB_SHA::12} [skip ci]"
           git pull --rebase origin main
           git push
