@@ -36,3 +36,18 @@ if (btn && menu) {
     }
   });
 }
+
+// Accessible role-detail dialogs
+document.querySelectorAll('[data-dialog]').forEach(trigger => {
+  trigger.addEventListener('click', () => {
+    const dialog = document.getElementById(trigger.dataset.dialog);
+    if (dialog instanceof HTMLDialogElement) dialog.showModal();
+  });
+});
+
+document.querySelectorAll('.role-dialog').forEach(dialog => {
+  dialog.querySelector('.dialog-close')?.addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', event => {
+    if (event.target === dialog) dialog.close();
+  });
+});
