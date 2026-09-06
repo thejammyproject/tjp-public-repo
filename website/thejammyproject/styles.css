@@ -81,6 +81,9 @@ section{padding:2.2rem 0}
 .card{grid-column:span 12;background:var(--card);border:1px solid rgba(148,163,184,.15);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.2rem}
 @media (min-width: 880px){.card.span-6{grid-column:span 6}.card.span-4{grid-column:span 4}}
 
+.feature-list{display:grid;gap:.7rem 2rem;padding-left:1.25rem}
+@media (min-width:880px){.feature-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 .muted{color:var(--muted)}
 
 .section-intro{max-width:62ch;color:var(--muted);margin-top:-.5rem}

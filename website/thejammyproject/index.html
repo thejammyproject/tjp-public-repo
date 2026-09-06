@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Site CSS -->
-  <link rel="stylesheet" href="styles.css?v=1.20">
+  <link rel="stylesheet" href="styles.css?v=1.21">
 </head>
 <body>
   <header>
@@ -82,22 +82,35 @@
     </section>
 
     <section id="projects" class="projects">
-      <h2>Project Work</h2>
+      <h2>Current Personal Projects</h2>
       <div class="grid">
-        <article class="card span-6">
-          <h3>Automation of Infrastructure Builds</h3>
-          <p class="muted">Standardised Terraform & Ansible workflows to accelerate and harden provisioning across environments at Creovai.</p>
-          <p><a class="btn" href="repository.html">Browse public repository →</a></p>
-        </article>
-        <article class="card span-6">
-          <h3>SQL Server Clustering</h3>
-          <p class="muted">Designed, deployed, and maintained SQL Server clusters end-to-end with robust backup, monitoring, and security baselines.</p>
-        </article>
-        <article class="card span-6">
-          <p class="eyebrow">Previous environments</p>
-          <h3>Homelab Project Archive</h3>
-          <p class="muted">Earlier Proxmox, k3s, Jenkins and OpenStack projects are retained as a record of the technologies and approaches that led to my current platform work.</p>
-          <p><a class="btn" href="archive.html">View project archive →</a></p>
+        <article class="card">
+          <p class="eyebrow">Current</p>
+          <h3>Self-Hosted Cloud Platform</h3>
+          <p class="muted">Designed, built and operate a self-hosted cloud platform focused on automation, security and platform engineering principles.</p>
+          <h4>Key Features</h4>
+          <ul class="feature-list">
+            <li>Built and operate a three-node RKE2 Kubernetes cluster alongside a dedicated KVM/libvirt virtualisation platform.</li>
+            <li>Developed self-service provisioning for virtual machines, encrypted block storage, backups, snapshots and isolated tenant networks.</li>
+            <li>Implemented managed WireGuard VPNs, subnetting, NAT gateways, security groups and public/private network routing.</li>
+            <li>Automated infrastructure provisioning and configuration management using Terraform, Ansible and cloud-init.</li>
+            <li>Implemented GitOps deployment workflows using Argo CD and GitHub Actions, including automated reconciliation and self-healing.</li>
+            <li>Deployed a three-instance PostgreSQL 18 cluster using CloudNativePG, with streaming replication, enforced TLS, encrypted Longhorn volumes and tested automatic failover.</li>
+            <li>Implemented encrypted PostgreSQL base backups, continuous WAL archiving and tested point-in-time recovery using a local S3-compatible object store.</li>
+            <li>Built a three-node HashiCorp Vault Raft cluster providing highly available secrets management, dynamic PostgreSQL credentials and PKI services.</li>
+            <li>Implemented short-lived mTLS certificates and automated certificate rotation for internal service-to-service communication.</li>
+            <li>Protected customer compute storage using LUKS2 encryption with encryption keys wrapped through Vault Transit.</li>
+            <li>Applied Kubernetes security controls including default-deny NetworkPolicies, least-privilege RBAC, non-root containers, seccomp profiles and read-only root filesystems.</li>
+            <li>Implemented monitoring and alerting using Prometheus, Grafana and Alertmanager, with centralised logging through OpenSearch.</li>
+            <li>Integrated Trivy, Gitleaks, Semgrep, Checkov and Bandit security scanning, with vulnerability findings consolidated in DefectDojo.</li>
+            <li>Implemented keyless container-image signing using Cosign and Sigstore, immutable digest pinning and Kyverno admission enforcement for first-party images.</li>
+            <li>Deployed a three-node NATS JetStream cluster with encrypted persistent storage and three-replica event streams.</li>
+            <li>Designed service and tenant isolation using dedicated PostgreSQL roles, Vault-issued dynamic credentials and PostgreSQL row-level security.</li>
+          </ul>
+          <div class="chiprow">
+            <a class="btn" href="repository.html">Browse public repository →</a>
+            <a class="btn" href="archive.html">View archived projects →</a>
+          </div>
         </article>
       </div>
     </section>
