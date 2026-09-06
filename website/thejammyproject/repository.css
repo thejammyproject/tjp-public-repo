@@ -12,17 +12,36 @@
 .breadcrumbs button:hover{text-decoration:underline}
 .breadcrumbs span{color:var(--text)}
 .github-file-link{font-size:.85rem;white-space:nowrap}
-.browser-layout{display:grid;grid-template-columns:minmax(240px,320px) minmax(0,1fr);min-height:590px;border:1px solid rgba(148,163,184,.18);border-radius:0 0 var(--radius) var(--radius);overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
-.repository-navigation{border-right:1px solid rgba(148,163,184,.18);background:rgba(11,11,20,.5);min-width:0}
-.parent-link{width:100%;padding:.8rem 1rem;border:0;border-bottom:1px solid rgba(148,163,184,.14);text-align:left;background:rgba(139,92,246,.07);color:var(--primary);cursor:pointer;font:inherit}
+.browser-layout{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);min-height:590px;border:1px solid rgba(148,163,184,.18);border-radius:0 0 var(--radius) var(--radius);overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
+.repository-navigation{border-right:1px solid rgba(148,163,184,.18);background:rgba(11,11,20,.5);min-width:0;overflow:auto}
+.tree-heading{padding:1rem;border-bottom:1px solid rgba(148,163,184,.14);font-size:.9rem}
+.branch-label{margin:.75rem;padding:.55rem .7rem;border:1px solid rgba(148,163,184,.2);border-radius:8px;background:rgba(255,255,255,.025);font-size:.82rem}
 .browser-status{padding:1.4rem;color:var(--muted)}
-.directory-list{list-style:none;margin:0;padding:.35rem 0}
-.directory-entry{display:grid;grid-template-columns:1.25rem minmax(0,1fr) auto;align-items:center;gap:.55rem;width:100%;padding:.68rem 1rem;border:0;background:transparent;color:var(--text);font:inherit;text-align:left;cursor:pointer}
-.directory-entry:hover,.directory-entry:focus-visible{background:rgba(139,92,246,.12);outline:none}
-.entry-icon{color:var(--muted);font-family:ui-monospace,monospace;font-weight:700}
-.entry-icon.directory{color:var(--primary)}
-.entry-detail{color:var(--muted);font-size:.72rem}
+.repository-tree,.tree-group{list-style:none;margin:0;padding:0}
+.repository-tree{padding:.15rem 0 .8rem}
+.tree-entry{display:grid;grid-template-columns:1rem 1rem minmax(0,1fr);align-items:center;gap:.35rem;width:100%;padding:.38rem .55rem;border:0;background:transparent;color:var(--text);font:inherit;font-size:.82rem;text-align:left;cursor:pointer}
+.tree-entry:hover,.tree-entry:focus-visible{background:rgba(139,92,246,.1);outline:none}
+.tree-entry[aria-current="page"]{background:rgba(139,92,246,.17);box-shadow:inset 3px 0 var(--primary)}
+.tree-disclosure{color:var(--muted);font-size:1rem;text-align:center}
+.tree-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.entry-icon{position:relative;display:inline-block;width:14px;height:16px;box-sizing:border-box}
+.entry-icon.file{border:1px solid #9ba8bb;border-radius:2px}
+.entry-icon.file::after{content:"";position:absolute;right:-1px;top:-1px;width:5px;height:5px;border-left:1px solid #9ba8bb;border-bottom:1px solid #9ba8bb;background:var(--card)}
+.entry-icon.directory{height:11px;margin-top:3px;border-radius:2px;background:#60a5fa}
+.entry-icon.directory::before{content:"";position:absolute;left:1px;top:-3px;width:6px;height:4px;border-radius:2px 2px 0 0;background:#60a5fa}
 .file-panel{min-width:0;background:#0d0e1b;overflow:hidden}
+.directory-view{padding:1rem}
+.directory-table{overflow:hidden;border:1px solid rgba(148,163,184,.18);border-radius:10px}
+.directory-table>div:not(.directory-table-header){border-top:1px solid rgba(148,163,184,.14)}
+.directory-table-header,.directory-row{display:grid;grid-template-columns:1.25rem minmax(180px,1fr) minmax(100px,.45fr) 80px;align-items:center;gap:.65rem}
+.directory-table-header{grid-template-columns:minmax(180px,1fr) minmax(100px,.45fr) 80px;padding:.7rem 1rem .7rem 2.9rem;background:rgba(18,18,37,.92);color:var(--muted);font-size:.72rem;font-weight:600}
+.directory-row{width:100%;padding:.7rem 1rem;border:0;background:transparent;color:var(--text);font:inherit;font-size:.84rem;text-align:left;cursor:pointer}
+.directory-row:hover,.directory-row:focus-visible{background:rgba(139,92,246,.1);outline:none}
+.directory-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#dce7f7}
+.directory-detail,.directory-size{color:var(--muted);font-size:.75rem}
+.directory-size{text-align:right}
+.directory-empty{margin:0;padding:1.2rem;color:var(--muted)}
+.readme-panel{margin-top:1rem;border:1px solid rgba(148,163,184,.18);border-radius:10px;overflow:hidden}
 .file-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 1rem;border-bottom:1px solid rgba(148,163,184,.16);background:rgba(18,18,37,.9)}
 .file-header h2{font-size:.9rem;margin:0;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}
 .file-header span{font-size:.75rem;color:var(--muted);white-space:nowrap}
@@ -59,7 +78,8 @@
 @media (max-width:520px){
   .repository-heading .btn{width:100%;justify-content:center}
   .browser-toolbar{padding:.85rem}
-  .directory-entry{padding:.7rem .8rem}
-  .entry-detail{display:none}
+  .directory-table-header{display:none}
+  .directory-row{grid-template-columns:1.25rem minmax(0,1fr) auto}
+  .directory-size{display:none}
 }
 @media (prefers-reduced-motion:reduce){.spinner{animation:none}}
