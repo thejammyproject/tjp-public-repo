@@ -41,15 +41,32 @@ if (btn && menu) {
 // where the native dialog top-layer API is unavailable or unreliable.
 let activeDialog = null;
 let dialogTrigger = null;
+let roleRequest = 0;
 
-function openRoleDialog(dialog, trigger) {
+async function openRoleDialog(dialog, trigger) {
   if (activeDialog) closeRoleDialog();
   activeDialog = dialog;
   dialogTrigger = trigger;
+  const content = dialog.querySelector('#role-dialog-content');
+  const role = trigger.dataset.role;
+  const request = ++roleRequest;
+  content.innerHTML = '<h2 id="role-dialog-title">Loading role details…</h2>';
   dialog.setAttribute('open', '');
   dialog.setAttribute('aria-modal', 'true');
   document.body.classList.add('modal-open');
   dialog.querySelector('.dialog-close')?.focus();
+
+  if (!/^[a-z0-9-]+$/.test(role)) return;
+  try {
+    const response = await fetch(`modals/${role}.html`, { cache: 'default' });
+    if (!response.ok) throw new Error('Role content unavailable');
+    const markup = await response.text();
+    if (activeDialog === dialog && request === roleRequest) content.innerHTML = markup;
+  } catch {
+    if (activeDialog === dialog && request === roleRequest) {
+      content.innerHTML = '<h2 id="role-dialog-title">Role details unavailable</h2><p>Please try again shortly.</p>';
+    }
+  }
 }
 
 function closeRoleDialog() {
@@ -64,10 +81,10 @@ function closeRoleDialog() {
 }
 
 document.addEventListener('click', event => {
-  const trigger = event.target.closest?.('[data-dialog]');
+  const trigger = event.target.closest?.('[data-role]');
   if (trigger) {
-    const dialog = document.getElementById(trigger.dataset.dialog);
-    if (dialog?.classList.contains('role-dialog')) openRoleDialog(dialog, trigger);
+    const dialog = document.getElementById('role-dialog');
+    if (dialog) openRoleDialog(dialog, trigger);
     return;
   }
   if (event.target.closest?.('.dialog-close')) closeRoleDialog();
