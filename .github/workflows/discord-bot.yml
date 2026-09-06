@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - python/discord-bot/**
+      - .dockerignore
       - .github/workflows/discord-bot.yml
 
 permissions:
@@ -27,7 +28,8 @@ jobs:
       - id: build
         uses: docker/build-push-action@v6
         with:
-          context: python/discord-bot
+          context: .
+          file: python/discord-bot/Dockerfile
           push: true
           tags: jammyuk/tjp-discord-bot:${{ github.sha }}
 
