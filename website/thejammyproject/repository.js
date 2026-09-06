@@ -4,7 +4,6 @@ const elements = {
   title: document.getElementById('repository-title'),
   description: document.getElementById('repository-description'),
   meta: document.getElementById('repository-meta'),
-  technologies: document.getElementById('repository-technologies'),
   repositoryLink: document.getElementById('repository-github-link'),
   currentLink: document.getElementById('current-github-link'),
   breadcrumbs: document.getElementById('breadcrumbs'),
@@ -341,12 +340,6 @@ async function initialise() {
     elements.title.textContent = config.title;
     elements.description.textContent = metadata.description || config.description;
     elements.repositoryLink.href = githubUrl(config);
-    elements.technologies.replaceChildren(...config.technologies.map(value => {
-      const chip = document.createElement('span');
-      chip.className = 'chip';
-      chip.textContent = value;
-      return chip;
-    }));
     const updated = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(commit.commit.author.date));
     elements.meta.textContent = `${config.owner}/${config.repo} · ${config.branch} · ${files} files · Updated ${updated} · ${commit.sha.slice(0, 7)} — ${commit.commit.message.split('\n')[0]}`;
     let initialPath = '';
