@@ -102,7 +102,7 @@ section{padding:2.2rem 0}
 .dialog-close{position:absolute;top:1rem;right:1rem;width:42px;height:42px;border-radius:12px;border:1px solid rgba(148,163,184,.25);background:rgba(255,255,255,.03);color:var(--text);font:inherit;font-size:1.5rem;line-height:1;cursor:pointer}
 .dialog-close:hover{border-color:var(--primary)}
 body.modal-open{overflow:hidden}
-body.modal-open::before{content:"";position:fixed;inset:0;z-index:99;background:rgba(3,4,12,.78);backdrop-filter:blur(4px);pointer-events:none}
+body.modal-open::before{content:"";position:fixed;inset:0;z-index:99;background:rgba(3,4,12,.78);backdrop-filter:blur(4px);pointer-events:auto}
 
 .eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.75rem;font-weight:700;color:#a9bfe8}
 .archive-hero{padding-bottom:1.2rem}

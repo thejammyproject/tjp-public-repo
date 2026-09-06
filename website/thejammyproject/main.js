@@ -88,6 +88,7 @@ document.addEventListener('click', event => {
     return;
   }
   if (event.target.closest?.('.dialog-close')) closeRoleDialog();
+  else if (activeDialog && !event.target.closest?.('.role-dialog')) closeRoleDialog();
 });
 
 document.addEventListener('keydown', event => {
