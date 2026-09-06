@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>James Shaw — IaC & Cloud Engineer</title>
+  <meta name="description" content="James Shaw — Infrastructure Engineer & Team Lead specialising in AWS, Terraform, Windows/SQL Server, Linux, monitoring and automation." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Site CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand">
+        <img src="images/tjp-logo.png" alt="TJP — The Jammy Project logo" />
+        <span>JAMES SHAW</span>
+      </div>
+      <button class="hamburger" id="navToggle" aria-expanded="false" aria-controls="site-menu" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+          <path d="M3 6h18M3 12h18M3 18h18"/>
+        </svg>
+      </button>
+      <nav class="menu" id="site-menu" aria-label="Sections">
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="repository.html">Repository</a>
+        <a href="#experience">Experience</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" id="about">
+      <p class="chip">Infrastructure as Code • AWS • Automation</p>
+      <h1>Infrastructure Engineer & Team Lead focused on reliable, secure cloud platforms with Terraform, AWS, and automation.</h1>
+      <p>I'm <strong>James Shaw</strong>, an Infrastructure Engineer and current Infrastructure Team Lead with 8+ years across cloud, automation, and systems administration.
+        I specialise in AWS, Terraform, Windows & SQL Server, and monitoring—driving automation-first, security-first practices.</p>
+        <p>This website runs on AWS ECS.</p>
+      <div class="chiprow" aria-label="Highlights">
+        <span class="chip">AWS (EC2, VPC, ALB, Route53, IAM)</span>
+        <span class="chip">Azure (VMs, PIM, FrontDoor, NSGs/Firewalls, AKS)</span>
+        <span class="chip">Terraform & Ansible</span>
+        <span class="chip">Windows Server 2019-2022 (CIS L1)</span>
+        <span class="chip">SQL Server Clustering</span>
+        <span class="chip">Monitoring: Elastic, Grafana, Zabbix, Splunk</span>
+        <span class="chip">Octopus Deploy • CI/CD</span>
+      </div>
+    </section>
+
+    <section id="skills">
+      <h2>Core Skills</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <h3>Cloud & IaC</h3>
+          <p class="muted">AWS (EC2, VPC, ALB, Route53, S3, CloudWatch, IAM, etc)</p>
+          <p class="muted">Azure (VMs, PIM, FrontDoor, NSGs/Firewalls, AKS, etc)</p>
+          <p class="muted">Terraform modules & state management, Ansible automation, Octopus Deploy.</p>
+          <p class="muted">Version control with GitHub/Bitbucket; policy-driven change management.</p>
+        </article>
+        <article class="card span-6">
+          <h3>Systems & Databases</h3>
+          <p class="muted">Windows Server 2019-2022 (CIS L1), Active Directory, SQL Server clustering lifecycle (design, build, manage and decommission), Linux Ubuntu 24.04 admin.</p>
+        </article>
+        <article class="card span-6">
+          <h3>Automation & Scripting</h3>
+          <p class="muted">PowerShell (strong), Bash (Beginner), Python (developing). CI/CD release management, security-first patterns (TLS, VPNs, proxies, SOPs).</p>
+        </article>
+        <article class="card span-6">
+          <h3>Monitoring & DR</h3>
+          <p class="muted">ElasticSearch, Grafana, Corelogix, Zabbix, Splunk. Backups & DR with Bacula, Commvault, Veritas; AWS DLM policies.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="projects" class="projects">
+      <h2>Project Work</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <h3>Automation of Infrastructure Builds</h3>
+          <p class="muted">Standardised Terraform & Ansible workflows to accelerate and harden provisioning across environments at Creovai.</p>
+          <p><a class="btn" href="repository.html">Browse public repository →</a></p>
+        </article>
+        <article class="card span-6">
+          <h3>SQL Server Clustering</h3>
+          <p class="muted">Designed, deployed, and maintained SQL Server clusters end-to-end with robust backup, monitoring, and security baselines.</p>
+        </article>
+        <article class="card span-6" id="k3s-project">
+        <h3>Proxmox VE + Kubernetes (k3s) Cluster</h3>
+        <p class="muted">Built a production-style homelab on Proxmox: 1 master + 2 workers, hosting multiple apps. Fully automated with Terraform, Ansible, Helm, and SOPS.</p>
+
+        <details>
+        <summary><strong>What's running</strong></summary>
+        <ul>
+        <li>Public personal CV site with modern, accessible design.</li>
+        <li>BookStack for documenting projects and runbooks.</li>
+        <li>Cloudflare DNS for domain management to static IP.</li>
+        <li>Cloudflare Tunnel for secure ingress via Cloudflare's edge (no ISP port-forwarding).</li>
+        </ul>
+        </details>
+
+        <details>
+        <summary><strong>Automation stack</strong></summary>
+        <ul>
+        <li><strong>Terraform</strong>: Proxmox VMs, Cloudflare DNS, and Zero Trust tunnel.</li>
+        <li><strong>Ansible</strong>: End-to-end k3s install & node configuration.</li>
+        <li><strong>Helm + Bash</strong>: App deployment (BookStack, CV site, etc.).</li>
+        <li><strong>SOPS</strong>: Encrypted secrets management.</li>
+        </ul>
+        </details>
+
+        <details>
+        <summary><strong>Resilience</strong></summary>
+        <ul>
+        <li>Rebuild the entire environment from scratch in a few hours.</li>
+        <li>Automated BookStack DB exports to local WSL; version-controlled in GitHub.</li>
+        </ul>
+        </details>
+        <!-- Optional action buttons; add real links if you want them visible -->
+        <!--
+        <div class="actions" style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <a class="button" href="https://YOUR-CV-SITE" target="_blank" rel="noopener">View CV Site</a>
+        <a class="button secondary" href="https://YOUR-BOOKSTACK" target="_blank" rel="noopener">Open BookStack</a>
+        </div>
+        -->
+        </article>
+      </div>
+    </section>
+
+    <section id="experience">
+      <h2>Experience</h2>
+      <ol class="timeline">
+        <li class="item">
+          <strong>Infrastructure Team Lead</strong> — Creovai (formerly Awaken Intelligence), Remote (Mar 2025 – Present)
+          <div class="muted">Lead infra operations, manage overseas engineers, optimise on-call, mentor team, and drive automation-first practices.</div>
+        </li>
+        <li class="item">
+          <strong>Infrastructure Engineer</strong> — Creovai (formerly Awaken Intelligence), Remote (Dec 2020 – Feb 2025)
+          <div class="muted">Automated infrastructure with Terraform & Ansible; designed SQL Server clusters; maintained Windows Server 2022 (CIS L1); monitoring (Elastic, Grafana, Corelogix); AWS DLM backups; Octopus Deploy; security-first designs with TLS, proxies & VPNs.</div>
+        </li>
+        <li class="item">
+          <strong>1st Line Support Engineer</strong> — BCN Group, Manchester (Aug 2020 – Dec 2020)
+          <div class="muted">Frontline support, M365 admin, remote installs and triage.</div>
+        </li>
+        <li class="item">
+          <strong>IT Support Engineer</strong> — Cloud53, Manchester (Nov 2019 – Jul 2020)
+          <div class="muted">1st–3rd line support, Windows Servers/AD/Exchange, WatchGuard firewalls, monitoring.</div>
+        </li>
+        <li class="item">
+          <strong>Technical Support Engineer</strong> — UKFast, Manchester (Jun 2018 – Oct 2019)
+          <div class="muted">Supported Linux & Windows, VMware/Hyper-V, enterprise backups (Bacula, Commvault), documentation, Grafana & Zabbix.</div>
+        </li>
+        <li class="item">
+          <strong>Service Delivery Specialist</strong> — Secure Information Assurance, Manchester (Nov 2016 – Jun 2018)
+          <div class="muted">Infrastructure support in security-focused environments; Zabbix & Splunk; Veritas Backup; Sophos AV; monthly service reports.</div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="learning">
+      <h2>Training & Development</h2>
+      <ul>
+        <li>Proxmox home lab for Kubernetes, Ansible, Jenkins, and Python.</li>
+        <li>Exploring Python automation projects and networking.</li>
+      </ul>
+    </section>
+
+    <section id="contact" class="contact">
+      <h2>Contact</h2>
+      <div class="grid">
+        <article class="card span-6">
+          <p>Want to collaborate or have a role in mind? Email me at <a href="mailto:Jrshaw12345@outlook.com" id="mailto">Jrshaw12345@outlook.com</a>.</p>
+          <div class="chiprow">
+            <a class="btn" href="https://www.linkedin.com/in/jamesshaw-sysadmin/" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a class="btn" href="https://github.com/thejammyproject" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="btn" href="" download>Download CV (DOCX)</a>
+          </div>
+        </article>
+        <article class="card span-6">
+          <form action="https://formspree.io/f/your-id" method="POST">
+            <label>
+              <span class="muted">Your name</span>
+              <input required name="name" placeholder="Your name" />
+            </label>
+            <label>
+              <span class="muted">Email</span>
+              <input required type="email" name="email" placeholder="you@email.com" />
+            </label>
+            <label>
+              <span class="muted">Message</span>
+              <textarea required name="message" rows="5" placeholder="Tell me about your project or role…"></textarea>
+            </label>
+            <button class="btn" type="submit">Send →</button>
+          </form>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div>© <span id="year"></span> James Shaw • The Jammy Project</div>
+      <div class="muted">Static, fast, and privacy-friendly. No cookies. No tracking.</div>
+    </div>
+  </footer>
+
+  <!-- Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "James Shaw",
+    "jobTitle": "Infrastructure Engineer & Team Lead",
+    "url": "https://www.thejammyproject.co.uk",
+    "sameAs": [
+      "https://www.linkedin.com/in/jamesshaw-sysadmin/",
+      "https://github.com/thejammyproject"
+    ]
+  }
+  </script>
+
+  <!-- Site JS -->
+  <script src="main.js" defer></script>
+</body>
+</html>

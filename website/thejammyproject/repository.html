@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Repository — James Shaw</title>
+  <meta name="description" content="Browse James Shaw's public infrastructure and automation portfolio without leaving The Jammy Project." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/styles/github-dark.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="repository.css">
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="The Jammy Project home">
+        <img src="images/tjp-logo.png" alt="" />
+        <span>JAMES SHAW</span>
+      </a>
+      <button class="hamburger" id="navToggle" aria-expanded="false" aria-controls="site-menu" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <nav class="menu" id="site-menu" aria-label="Site navigation">
+        <a href="index.html#about">About</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#projects">Projects</a>
+        <a href="repository.html" aria-current="page">Repository</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container repository-page">
+    <section class="repository-hero" aria-labelledby="repository-title">
+      <p class="chip">Public repository · Read only</p>
+      <div class="repository-heading">
+        <div>
+          <h1 id="repository-title">Cloud & Infrastructure Portfolio</h1>
+          <p class="muted" id="repository-description">Loading repository information…</p>
+        </div>
+        <a class="btn" id="repository-github-link" href="https://github.com/thejammyproject/tjp-public-repo" target="_blank" rel="noreferrer">View on GitHub ↗</a>
+      </div>
+      <div class="repository-meta" id="repository-meta" aria-live="polite"></div>
+      <div class="chiprow" id="repository-technologies" aria-label="Technologies"></div>
+    </section>
+
+    <section class="repository-browser" aria-labelledby="browser-title">
+      <div class="browser-toolbar">
+        <div>
+          <p class="eyebrow" id="browser-title">Repository browser</p>
+          <nav class="breadcrumbs" id="breadcrumbs" aria-label="Repository breadcrumbs"></nav>
+        </div>
+        <a class="github-file-link" id="current-github-link" href="https://github.com/thejammyproject/tjp-public-repo" target="_blank" rel="noreferrer">Open current location on GitHub ↗</a>
+      </div>
+
+      <div class="browser-layout">
+        <aside class="repository-navigation" aria-label="Files and directories">
+          <button class="parent-link" id="parent-link" type="button" hidden>← Parent directory</button>
+          <div class="browser-status" id="directory-status" role="status">Loading repository…</div>
+          <ul class="directory-list" id="directory-list"></ul>
+        </aside>
+
+        <article class="file-panel" id="file-panel" aria-live="polite">
+          <div class="empty-state">
+            <span class="empty-icon" aria-hidden="true">⌁</span>
+            <h2>Select a file</h2>
+            <p>Choose a file from the repository to inspect its contents.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div>© <span id="year"></span> James Shaw • The Jammy Project</div>
+      <div class="muted">Static, fast, and privacy-friendly. No cookies. No tracking.</div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/highlight.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@18.0.7/lib/marked.umd.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.14/dist/purify.min.js" defer></script>
+  <script src="main.js" defer></script>
+  <script type="module" src="repository.js"></script>
+</body>
+</html>

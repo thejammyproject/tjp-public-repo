@@ -1,0 +1,1 @@
+{"content":"/* Toggle between adding and removing the \"responsive\" class to topnav when the user clicks on the icon */\r\nfunction myFunction() {\r\n  var x = document.getElementById(\"myTopnav\");\r\n  if (x.className === \"topnav\") {\r\n    x.className += \" responsive\";\r\n  } else {\r\n    x.className = \"topnav\";\r\n  }\r\n}\r\n"}

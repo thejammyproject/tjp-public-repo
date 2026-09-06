@@ -1,0 +1,1 @@
+{"content":"# SOPS config should be tracked\n.sops.yaml\n\n# Decrypted temp files\n.decrypted~*\n*.decrypted~*\n\n# Plaintext credentials and private keys must be stored through SOPS.\n.env\n.env.*\n!.env.example\n*.key\n*.pem\n\n# Runtime output may contain addresses, requests, or tokens.\n*.log\n"}
