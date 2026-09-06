@@ -11,6 +11,8 @@
 .breadcrumbs button{appearance:none;border:0;padding:0;background:none;color:var(--primary);font:inherit;cursor:pointer}
 .breadcrumbs button:hover{text-decoration:underline}
 .breadcrumbs span{color:var(--text)}
+.browser-actions{display:flex;align-items:flex-end;flex-direction:column;gap:.35rem}
+.sync-status{color:var(--muted);font-size:.7rem}
 .github-file-link{font-size:.85rem;white-space:nowrap}
 .browser-layout{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);min-height:590px;border:1px solid rgba(148,163,184,.18);border-radius:0 0 var(--radius) var(--radius);overflow:hidden;background:var(--card);box-shadow:var(--shadow)}
 .repository-navigation{border-right:1px solid rgba(148,163,184,.18);background:rgba(11,11,20,.5);min-width:0;overflow:auto}
@@ -33,13 +35,14 @@
 .directory-view{padding:1rem}
 .directory-table{overflow:hidden;border:1px solid rgba(148,163,184,.18);border-radius:10px}
 .directory-table>div:not(.directory-table-header){border-top:1px solid rgba(148,163,184,.14)}
-.directory-table-header,.directory-row{display:grid;grid-template-columns:1.25rem minmax(180px,1fr) minmax(100px,.45fr) 80px;align-items:center;gap:.65rem}
-.directory-table-header{grid-template-columns:minmax(180px,1fr) minmax(100px,.45fr) 80px;padding:.7rem 1rem .7rem 2.9rem;background:rgba(18,18,37,.92);color:var(--muted);font-size:.72rem;font-weight:600}
+.directory-table-header,.directory-row{display:grid;grid-template-columns:1.25rem minmax(180px,1fr) 100px 70px 105px;align-items:center;gap:.65rem}
+.directory-table-header{grid-template-columns:minmax(180px,1fr) 100px 70px 105px;padding:.7rem 1rem .7rem 2.9rem;background:rgba(18,18,37,.92);color:var(--muted);font-size:.72rem;font-weight:600}
 .directory-row{width:100%;padding:.7rem 1rem;border:0;background:transparent;color:var(--text);font:inherit;font-size:.84rem;text-align:left;cursor:pointer}
 .directory-row:hover,.directory-row:focus-visible{background:rgba(139,92,246,.1);outline:none}
 .directory-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#dce7f7}
-.directory-detail,.directory-size{color:var(--muted);font-size:.75rem}
+.directory-detail,.directory-size,.directory-updated{color:var(--muted);font-size:.75rem}
 .directory-size{text-align:right}
+.directory-updated{text-align:right;white-space:nowrap}
 .directory-empty{margin:0;padding:1.2rem;color:var(--muted)}
 .readme-panel{margin-top:1rem;border:1px solid rgba(148,163,184,.18);border-radius:10px;overflow:hidden}
 .file-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.85rem 1rem;border-bottom:1px solid rgba(148,163,184,.16);background:rgba(18,18,37,.9)}
@@ -70,6 +73,7 @@
 @media (max-width:880px){
   .repository-hero{padding-top:2.7rem}
   .repository-heading,.browser-toolbar{align-items:flex-start;flex-direction:column}
+  .browser-actions{align-items:flex-start}
   .browser-layout{grid-template-columns:1fr}
   .repository-navigation{border-right:0;border-bottom:1px solid rgba(148,163,184,.18);max-height:360px;overflow:auto}
   .github-file-link{white-space:normal}
@@ -80,6 +84,6 @@
   .browser-toolbar{padding:.85rem}
   .directory-table-header{display:none}
   .directory-row{grid-template-columns:1.25rem minmax(0,1fr) auto}
-  .directory-size{display:none}
+  .directory-detail,.directory-size{display:none}
 }
 @media (prefers-reduced-motion:reduce){.spinner{animation:none}}

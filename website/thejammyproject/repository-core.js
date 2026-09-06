@@ -69,6 +69,24 @@ export function entriesFromGitTree(tree, maxFileSize = 524288) {
     });
 }
 
+export function relativeTime(value, now = Date.now()) {
+  const difference = new Date(value).getTime() - now;
+  const absolute = Math.abs(difference);
+  const units = absolute < 60_000
+    ? ['second', 1_000]
+    : absolute < 3_600_000
+      ? ['minute', 60_000]
+      : absolute < 86_400_000
+        ? ['hour', 3_600_000]
+        : absolute < 2_592_000_000
+          ? ['day', 86_400_000]
+          : absolute < 31_536_000_000
+            ? ['month', 2_592_000_000]
+            : ['year', 31_536_000_000];
+  const amount = Math.round(difference / units[1]);
+  return new Intl.RelativeTimeFormat(undefined, { numeric: 'auto' }).format(amount, units[0]);
+}
+
 export function rawGithubUrl(config, path) {
   const safePath = normaliseRepositoryPath(path);
   const encodedPath = safePath.split('/').map(encodeURIComponent).join('/');

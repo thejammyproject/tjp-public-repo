@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildBreadcrumbs, entriesForDirectory, entriesFromGitTree, githubUrl, isMarkdown, normaliseRepositoryPath, rawGithubUrl } from './repository-core.js';
+import { buildBreadcrumbs, entriesForDirectory, entriesFromGitTree, githubUrl, isMarkdown, normaliseRepositoryPath, rawGithubUrl, relativeTime } from './repository-core.js';
 
 test('normalises valid paths and rejects traversal', () => {
   assert.equal(normaliseRepositoryPath('/deploy/k8s/'), 'deploy/k8s');
@@ -43,4 +43,10 @@ test('creates raw-content URLs only for the configured repository', () => {
     rawGithubUrl({ owner: 'owner', repo: 'repo', branch: 'main' }, 'a b/file.yml'),
     'https://raw.githubusercontent.com/owner/repo/main/a%20b/file.yml'
   );
+});
+
+test('formats GitHub-style relative timestamps', () => {
+  const now = Date.parse('2026-09-06T12:00:00Z');
+  assert.equal(relativeTime('2026-09-06T09:00:00Z', now), '3 hours ago');
+  assert.equal(relativeTime('2026-09-05T12:00:00Z', now), 'yesterday');
 });
