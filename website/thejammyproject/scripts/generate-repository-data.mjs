@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { languageForPath } from '../repository-core.mjs';
+import { languageForPath } from '../repository-core.js';
 
 const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
 const siteDirectory = path.resolve(scriptDirectory, '..');
