@@ -37,17 +37,42 @@ if (btn && menu) {
   });
 }
 
-// Accessible role-detail dialogs
-document.querySelectorAll('[data-dialog]').forEach(trigger => {
-  trigger.addEventListener('click', () => {
+// Role-detail dialogs use an explicit open state so they also work in browsers
+// where the native dialog top-layer API is unavailable or unreliable.
+let activeDialog = null;
+let dialogTrigger = null;
+
+function openRoleDialog(dialog, trigger) {
+  if (activeDialog) closeRoleDialog();
+  activeDialog = dialog;
+  dialogTrigger = trigger;
+  dialog.setAttribute('open', '');
+  dialog.setAttribute('aria-modal', 'true');
+  document.body.classList.add('modal-open');
+  dialog.querySelector('.dialog-close')?.focus();
+}
+
+function closeRoleDialog() {
+  if (!activeDialog) return;
+  activeDialog.removeAttribute('open');
+  activeDialog.removeAttribute('aria-modal');
+  document.body.classList.remove('modal-open');
+  const trigger = dialogTrigger;
+  activeDialog = null;
+  dialogTrigger = null;
+  trigger?.focus();
+}
+
+document.addEventListener('click', event => {
+  const trigger = event.target.closest?.('[data-dialog]');
+  if (trigger) {
     const dialog = document.getElementById(trigger.dataset.dialog);
-    if (dialog && typeof dialog.showModal === 'function') dialog.showModal();
-  });
+    if (dialog?.classList.contains('role-dialog')) openRoleDialog(dialog, trigger);
+    return;
+  }
+  if (event.target.closest?.('.dialog-close')) closeRoleDialog();
 });
 
-document.querySelectorAll('.role-dialog').forEach(dialog => {
-  dialog.querySelector('.dialog-close')?.addEventListener('click', () => dialog.close());
-  dialog.addEventListener('click', event => {
-    if (event.target === dialog) dialog.close();
-  });
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && activeDialog) closeRoleDialog();
 });
