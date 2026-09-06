@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildBreadcrumbs, entriesForDirectory, githubUrl, isMarkdown, normaliseRepositoryPath } from './repository-core.mjs';
+import { buildBreadcrumbs, entriesForDirectory, githubUrl, isMarkdown, normaliseRepositoryPath } from './repository-core.js';
 
 test('normalises valid paths and rejects traversal', () => {
   assert.equal(normaliseRepositoryPath('/deploy/k8s/'), 'deploy/k8s');

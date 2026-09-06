@@ -24,7 +24,7 @@ spec:
                 topologyKey: kubernetes.io/hostname
       containers:
         - name: website
-          image: jammyuk/thejammyproject-website:v1.13@sha256:198268e2f0d7a49d5a46c52d87db0eec4f943f9e015db535350d96768d97aa34
+          image: jammyuk/thejammyproject-website:v1.14@sha256:eedb6b79c06a4866841caaa08c4ac20d95867a07eb3126ff70063038ce0f700b
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
