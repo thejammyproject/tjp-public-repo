@@ -1,0 +1,1 @@
+{"content":"print(\"My\", \"name is\", \"James.\", sep=\"-\")\nprint(\"James Thy Legendary is my name.\")\n\nprint(\"    *\")\nprint(\"   * *\")\nprint(\"  *   *\")\nprint(\" *     *\")\nprint(\"***   ***\")\nprint(\"  *   *\")\nprint(\"  *   *\")\nprint(\"  *****\")"}

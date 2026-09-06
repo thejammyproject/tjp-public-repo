@@ -1,0 +1,1 @@
+{"content":"# Runtime secrets are materialized from SOPS/Kubernetes.\n.env\n\n# Generated runtime data.\n__pycache__/\n*.py[cod]\n*.py_old\n*.log\nlostark/logs/\nlostark/sql/\n\n# Local credentials and editor files.\n.ssh/\n.tls/\n.vscode/\n.idea/\n"}

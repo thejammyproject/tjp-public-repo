@@ -1,0 +1,7 @@
+.git
+.github
+terraform
+**/*.tf
+**/.terraform
+**/.terraform.lock.hcl
+README.md

@@ -1,0 +1,1 @@
+{"content":"{\n  \"name\": \"thejammyproject-website\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"scripts\": {\n    \"generate:repository\": \"node scripts/generate-repository-data.mjs\",\n    \"test\": \"node --test repository.test.mjs\"\n  }\n}\n"}
