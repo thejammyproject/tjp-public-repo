@@ -41,7 +41,7 @@ if (btn && menu) {
 document.querySelectorAll('[data-dialog]').forEach(trigger => {
   trigger.addEventListener('click', () => {
     const dialog = document.getElementById(trigger.dataset.dialog);
-    if (dialog instanceof HTMLDialogElement) dialog.showModal();
+    if (dialog && typeof dialog.showModal === 'function') dialog.showModal();
   });
 });
 
