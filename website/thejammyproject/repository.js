@@ -1,4 +1,4 @@
-import { buildBreadcrumbs, entriesForDirectory, githubUrl, isMarkdown, normaliseRepositoryPath } from './repository-core.js';
+import { buildBreadcrumbs, entriesForDirectory, entriesFromGitTree, githubUrl, isMarkdown, normaliseRepositoryPath, rawGithubUrl } from './repository-core.js';
 
 const elements = {
   title: document.getElementById('repository-title'),
@@ -14,7 +14,7 @@ const elements = {
   filePanel: document.getElementById('file-panel')
 };
 
-let manifest;
+let repository;
 let currentPath = '';
 
 function setUrl(path) {
@@ -56,11 +56,11 @@ function renderBreadcrumbs(entry) {
       elements.breadcrumbs.append(createPathButton(crumb.label, crumb.path));
     }
   }
-  elements.currentLink.href = githubUrl(manifest.config, currentPath, entry?.type || 'directory');
+  elements.currentLink.href = githubUrl(repository.config, currentPath, entry?.type || 'directory');
 }
 
 function renderDirectory(directory) {
-  const children = entriesForDirectory(manifest.entries, directory);
+  const children = entriesForDirectory(repository.entries, directory);
   elements.directoryList.replaceChildren();
   elements.directoryStatus.hidden = true;
   if (!children.length) {
@@ -114,9 +114,14 @@ async function renderFile(entry, { landing = false } = {}) {
   }
   elements.filePanel.innerHTML = '<div class="file-loading" role="status"><span class="spinner"></span>Loading file…</div>';
   try {
-    const response = await fetch(entry.dataFile, { cache: 'default' });
-    if (!response.ok) throw new Error('File snapshot unavailable');
-    const { content } = await response.json();
+    const response = await fetch(rawGithubUrl(repository.config, entry.path), { cache: 'default' });
+    if (!response.ok) throw new Error('GitHub file unavailable');
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    if (bytes.subarray(0, Math.min(bytes.length, 8000)).includes(0)) {
+      renderEmptyPanel('Preview unavailable', 'This appears to be a binary file. Use the GitHub link to view the original.');
+      return;
+    }
+    const content = new TextDecoder('utf-8', { fatal: false }).decode(bytes);
     const header = document.createElement('header');
     header.className = 'file-header';
     const heading = document.createElement('h2');
@@ -127,7 +132,7 @@ async function renderFile(entry, { landing = false } = {}) {
     const body = isMarkdown(entry.path) ? renderMarkdown(content) : renderCode(content, entry.language);
     elements.filePanel.replaceChildren(header, body);
   } catch {
-    renderEmptyPanel('Unable to load this file', 'The repository snapshot may be unavailable. Please try again or use the GitHub link.');
+    renderEmptyPanel('Unable to load this file', 'GitHub may be unavailable or rate-limiting requests. Please try again or use the GitHub link.');
   }
 }
 
@@ -178,9 +183,9 @@ function renderMarkdown(content) {
 }
 
 function renderLocation() {
-  const entry = manifest.entries.find(item => item.path === currentPath);
+  const entry = repository.entries.find(item => item.path === currentPath);
   if (currentPath && !entry) {
-    renderError('That file or directory was not found in this repository snapshot.');
+    renderError('That file or directory was not found in this repository.');
     return;
   }
   renderBreadcrumbs(entry);
@@ -191,7 +196,7 @@ function renderLocation() {
   }
   const directory = entry?.path || '';
   renderDirectory(directory);
-  const readme = manifest.entries.find(item => item.parent === directory && item.type === 'file' && /^readme\.md$/i.test(item.name));
+  const readme = repository.entries.find(item => item.parent === directory && item.type === 'file' && /^readme\.md$/i.test(item.name));
   readme ? renderFile(readme, { landing: true }) : renderEmptyPanel();
 }
 
@@ -204,12 +209,31 @@ function renderError(message) {
 
 async function initialise() {
   try {
-    const response = await fetch('repository-data/manifest.json', { cache: 'default' });
-    if (!response.ok) throw new Error('Manifest unavailable');
-    manifest = await response.json();
-    const { config, commit, counts } = manifest;
+    const configResponse = await fetch('repository-config.json', { cache: 'default' });
+    if (!configResponse.ok) throw new Error('Configuration unavailable');
+    const config = await configResponse.json();
+    const apiBase = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}`;
+    const apiOptions = {
+      cache: 'default',
+      headers: { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' }
+    };
+    const [metadataResponse, treeResponse, commitsResponse] = await Promise.all([
+      fetch(apiBase, apiOptions),
+      fetch(`${apiBase}/git/trees/${encodeURIComponent(config.branch)}?recursive=1`, apiOptions),
+      fetch(`${apiBase}/commits?sha=${encodeURIComponent(config.branch)}&per_page=1`, apiOptions)
+    ]);
+    if (![metadataResponse, treeResponse, commitsResponse].every(response => response.ok)) {
+      throw new Error('GitHub API unavailable');
+    }
+    const [metadata, treeData, commits] = await Promise.all([
+      metadataResponse.json(), treeResponse.json(), commitsResponse.json()
+    ]);
+    if (treeData.truncated) throw new Error('GitHub returned a truncated repository tree');
+    repository = { config, entries: entriesFromGitTree(treeData.tree, config.maxFileSize) };
+    const commit = commits[0];
+    const files = repository.entries.filter(entry => entry.type === 'file').length;
     elements.title.textContent = config.title;
-    elements.description.textContent = config.description;
+    elements.description.textContent = metadata.description || config.description;
     elements.repositoryLink.href = githubUrl(config);
     elements.technologies.replaceChildren(...config.technologies.map(value => {
       const chip = document.createElement('span');
@@ -217,19 +241,19 @@ async function initialise() {
       chip.textContent = value;
       return chip;
     }));
-    const updated = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(commit.date));
-    elements.meta.textContent = `${config.owner}/${config.repo} · ${config.branch} · ${counts.files} files · Updated ${updated}${commit.shortSha ? ` · ${commit.shortSha}` : ''} — ${commit.message}`;
+    const updated = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(commit.commit.author.date));
+    elements.meta.textContent = `${config.owner}/${config.repo} · ${config.branch} · ${files} files · Updated ${updated} · ${commit.sha.slice(0, 7)} — ${commit.commit.message.split('\n')[0]}`;
     let initialPath = '';
     try { initialPath = normaliseRepositoryPath(new URLSearchParams(location.search).get('path') || ''); }
     catch { renderError('That repository path is not valid.'); return; }
     navigate(initialPath, true);
   } catch {
-    renderError('The repository snapshot is unavailable right now.');
+    renderError('GitHub is unavailable or has rate-limited this connection. Please try again shortly.');
   }
 }
 
 window.addEventListener('popstate', () => {
-  if (manifest) navigate(new URLSearchParams(location.search).get('path') || '', true);
+  if (repository) navigate(new URLSearchParams(location.search).get('path') || '', true);
 });
 
 initialise();

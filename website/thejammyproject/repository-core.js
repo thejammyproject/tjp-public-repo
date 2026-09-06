@@ -47,6 +47,34 @@ export function entriesForDirectory(entries, directory = '') {
     .sort((a, b) => Number(b.type === 'directory') - Number(a.type === 'directory') || a.name.localeCompare(b.name));
 }
 
+export function entriesFromGitTree(tree, maxFileSize = 524288) {
+  return tree
+    .filter(item => item.type === 'tree' || item.type === 'blob')
+    .map(item => {
+      const path = normaliseRepositoryPath(item.path);
+      const type = item.type === 'tree' ? 'directory' : 'file';
+      const size = item.size || 0;
+      return {
+        path,
+        parent: path.includes('/') ? path.slice(0, path.lastIndexOf('/')) : '',
+        name: path.split('/').pop(),
+        type,
+        size,
+        language: type === 'file' ? languageForPath(path) : undefined,
+        viewable: type === 'file' && size <= maxFileSize,
+        unavailableReason: type === 'file' && size > maxFileSize
+          ? 'This file is too large to preview safely.'
+          : undefined
+      };
+    });
+}
+
+export function rawGithubUrl(config, path) {
+  const safePath = normaliseRepositoryPath(path);
+  const encodedPath = safePath.split('/').map(encodeURIComponent).join('/');
+  return `https://raw.githubusercontent.com/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/${encodeURIComponent(config.branch)}/${encodedPath}`;
+}
+
 export function githubUrl(config, path = '', type = 'directory') {
   const safePath = normaliseRepositoryPath(path);
   const base = `https://github.com/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}`;

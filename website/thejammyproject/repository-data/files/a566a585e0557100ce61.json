@@ -1,1 +1,0 @@
-{"content":"# .sops.yaml\ncreation_rules:\n  - path_regex: .*\\.jammy\\.ya?ml$\n    age: >-\n      age1x76u5l09dsf266ggwh6hlvqwf5wk0j2yxdqwwmjjd9zje7790gkqfknjyc\n"}

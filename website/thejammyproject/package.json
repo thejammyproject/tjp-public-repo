@@ -3,7 +3,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate:repository": "node scripts/generate-repository-data.mjs",
     "test": "node --test repository.test.mjs"
   }
 }
