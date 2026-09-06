@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.12.0/styles/github-dark.min.css">
   <link rel="stylesheet" href="styles.css?v=1.25">
-  <link rel="stylesheet" href="repository.css">
+  <link rel="stylesheet" href="repository.css?v=1.1">
 </head>
 <body>
   <header>
@@ -59,9 +59,10 @@
 
       <div class="browser-layout">
         <aside class="repository-navigation" aria-label="Files and directories">
-          <button class="parent-link" id="parent-link" type="button" hidden>← Parent directory</button>
+          <div class="tree-heading"><strong>Files</strong></div>
+          <div class="branch-label" aria-label="Current branch"><span aria-hidden="true">⑂</span> main</div>
           <div class="browser-status" id="directory-status" role="status">Loading repository…</div>
-          <ul class="directory-list" id="directory-list"></ul>
+          <ul class="repository-tree" id="repository-tree"></ul>
         </aside>
 
         <article class="file-panel" id="file-panel" aria-live="polite">
@@ -86,6 +87,6 @@
   <script src="https://cdn.jsdelivr.net/npm/marked@18.0.7/lib/marked.umd.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.4.14/dist/purify.min.js" defer></script>
   <script src="main.js?v=1.20" defer></script>
-  <script type="module" src="repository.js"></script>
+  <script type="module" src="repository.js?v=1.1"></script>
 </body>
 </html>

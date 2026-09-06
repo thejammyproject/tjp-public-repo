@@ -8,14 +8,14 @@ const elements = {
   repositoryLink: document.getElementById('repository-github-link'),
   currentLink: document.getElementById('current-github-link'),
   breadcrumbs: document.getElementById('breadcrumbs'),
-  parent: document.getElementById('parent-link'),
   directoryStatus: document.getElementById('directory-status'),
-  directoryList: document.getElementById('directory-list'),
+  repositoryTree: document.getElementById('repository-tree'),
   filePanel: document.getElementById('file-panel')
 };
 
 let repository;
 let currentPath = '';
+const expandedDirectories = new Set(['']);
 
 function setUrl(path) {
   const url = new URL(window.location.href);
@@ -43,52 +43,131 @@ function createPathButton(label, path, className = '') {
   return button;
 }
 
+function iconForEntry(entry) {
+  const icon = document.createElement('span');
+  icon.className = `entry-icon ${entry.type}`;
+  icon.setAttribute('aria-hidden', 'true');
+  return icon;
+}
+
 function renderBreadcrumbs(entry) {
   elements.breadcrumbs.replaceChildren();
   for (const [index, crumb] of buildBreadcrumbs(currentPath).entries()) {
+    const label = index === 0 ? repository.config.repo : crumb.label;
     if (index) elements.breadcrumbs.append(document.createTextNode(' / '));
     if (crumb.path === currentPath) {
       const current = document.createElement('span');
-      current.textContent = crumb.label;
+      current.textContent = label;
       current.setAttribute('aria-current', 'page');
       elements.breadcrumbs.append(current);
     } else {
-      elements.breadcrumbs.append(createPathButton(crumb.label, crumb.path));
+      elements.breadcrumbs.append(createPathButton(label, crumb.path));
     }
   }
   elements.currentLink.href = githubUrl(repository.config, currentPath, entry?.type || 'directory');
 }
 
-function renderDirectory(directory) {
-  const children = entriesForDirectory(repository.entries, directory);
-  elements.directoryList.replaceChildren();
+function expandPath(path) {
+  const parts = path ? path.split('/') : [];
+  expandedDirectories.add('');
+  parts.forEach((_, index) => expandedDirectories.add(parts.slice(0, index + 1).join('/')));
+}
+
+function renderTree() {
+  elements.repositoryTree.replaceChildren();
   elements.directoryStatus.hidden = true;
-  if (!children.length) {
-    elements.directoryStatus.textContent = 'This directory is empty.';
-    elements.directoryStatus.hidden = false;
+
+  function appendEntries(parent, list, depth) {
+    for (const entry of entriesForDirectory(repository.entries, parent)) {
+      const item = document.createElement('li');
+      item.className = 'tree-item';
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'tree-entry';
+      button.style.paddingLeft = `${.65 + depth}rem`;
+      button.setAttribute('aria-current', entry.path === currentPath ? 'page' : 'false');
+
+      const disclosure = document.createElement('span');
+      disclosure.className = 'tree-disclosure';
+      if (entry.type === 'directory') {
+        const expanded = expandedDirectories.has(entry.path);
+        disclosure.textContent = expanded ? '⌄' : '›';
+        button.setAttribute('aria-expanded', String(expanded));
+      }
+      const icon = iconForEntry(entry);
+      const label = document.createElement('span');
+      label.className = 'tree-label';
+      label.textContent = entry.name;
+      button.replaceChildren(disclosure, icon, label);
+      button.setAttribute('aria-label', `${entry.type === 'directory' ? 'Open folder' : 'Open file'} ${entry.path}`);
+      if (entry.type === 'directory') {
+        button.addEventListener('click', () => {
+          expandedDirectories.has(entry.path) ? expandedDirectories.delete(entry.path) : expandedDirectories.add(entry.path);
+          navigate(entry.path);
+        });
+      } else button.addEventListener('click', () => navigate(entry.path));
+      item.append(button);
+      list.append(item);
+
+      if (entry.type === 'directory' && expandedDirectories.has(entry.path)) {
+        const nested = document.createElement('ul');
+        nested.className = 'tree-group';
+        item.append(nested);
+        appendEntries(entry.path, nested, depth + 1);
+      }
+    }
   }
 
+  appendEntries('', elements.repositoryTree, 0);
+}
+
+function createDirectoryListing(directory) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'directory-view';
+  const table = document.createElement('div');
+  table.className = 'directory-table';
+  const tableHeader = document.createElement('div');
+  tableHeader.className = 'directory-table-header';
+  tableHeader.innerHTML = '<span>Name</span><span>Type</span><span>Size</span>';
+  table.append(tableHeader);
+
+  if (directory) {
+    const item = document.createElement('div');
+    const parentPath = directory.split('/').slice(0, -1).join('/');
+    const button = createPathButton('..', parentPath, 'directory-row');
+    button.replaceChildren(iconForEntry({ type: 'directory' }), document.createTextNode('..'), document.createElement('span'), document.createElement('span'));
+    item.append(button);
+    table.append(item);
+  }
+
+  const children = entriesForDirectory(repository.entries, directory);
   for (const entry of children) {
-    const item = document.createElement('li');
-    const button = createPathButton(entry.name, entry.path, 'directory-entry');
-    const icon = document.createElement('span');
-    icon.className = `entry-icon ${entry.type}`;
-    icon.textContent = entry.type === 'directory' ? '▸' : '·';
-    icon.setAttribute('aria-hidden', 'true');
+    const item = document.createElement('div');
+    const button = createPathButton(entry.name, entry.path, 'directory-row');
+    const icon = iconForEntry(entry);
     const label = document.createElement('span');
+    label.className = 'directory-name';
     label.textContent = entry.name;
-    const detail = document.createElement('span');
-    detail.className = 'entry-detail';
-    detail.textContent = entry.type === 'directory' ? 'Folder' : formatBytes(entry.size);
-    button.replaceChildren(icon, label, detail);
+    const type = document.createElement('span');
+    type.className = 'directory-detail';
+    type.textContent = entry.type === 'directory' ? 'Directory' : entry.language;
+    const size = document.createElement('span');
+    size.className = 'directory-size';
+    size.textContent = entry.type === 'directory' ? '—' : formatBytes(entry.size);
+    button.replaceChildren(icon, label, type, size);
     button.setAttribute('aria-label', `${entry.type === 'directory' ? 'Open folder' : 'Open file'} ${entry.name}`);
     item.append(button);
-    elements.directoryList.append(item);
+    table.append(item);
   }
 
-  const parentPath = directory.split('/').slice(0, -1).join('/');
-  elements.parent.hidden = !directory;
-  elements.parent.onclick = () => navigate(parentPath);
+  if (!children.length) {
+    const empty = document.createElement('p');
+    empty.className = 'directory-empty';
+    empty.textContent = 'This directory is empty.';
+    table.append(empty);
+  }
+  wrapper.append(table);
+  return wrapper;
 }
 
 function formatBytes(bytes = 0) {
@@ -133,6 +212,31 @@ async function renderFile(entry, { landing = false } = {}) {
     elements.filePanel.replaceChildren(header, body);
   } catch {
     renderEmptyPanel('Unable to load this file', 'GitHub may be unavailable or rate-limiting requests. Please try again or use the GitHub link.');
+  }
+}
+
+async function renderDirectoryPanel(directory) {
+  const listing = createDirectoryListing(directory);
+  elements.filePanel.replaceChildren(listing);
+  const readme = repository.entries.find(item => item.parent === directory && item.type === 'file' && /^readme\.md$/i.test(item.name));
+  if (!readme?.viewable) return;
+
+  try {
+    const response = await fetch(rawGithubUrl(repository.config, readme.path), { cache: 'default' });
+    if (!response.ok) return;
+    const content = await response.text();
+    if (currentPath !== directory) return;
+    const readmePanel = document.createElement('section');
+    readmePanel.className = 'readme-panel';
+    const header = document.createElement('header');
+    header.className = 'file-header';
+    const heading = document.createElement('h2');
+    heading.textContent = 'README.md';
+    header.append(heading);
+    readmePanel.append(header, renderMarkdown(content));
+    listing.append(readmePanel);
+  } catch {
+    // The directory browser remains usable when a README cannot be fetched.
   }
 }
 
@@ -189,19 +293,21 @@ function renderLocation() {
     return;
   }
   renderBreadcrumbs(entry);
+  const treePath = entry?.type === 'file'
+    ? entry.parent
+    : currentPath.split('/').slice(0, -1).join('/');
+  expandPath(treePath);
+  renderTree();
   if (entry?.type === 'file') {
-    renderDirectory(entry.parent);
     renderFile(entry);
     return;
   }
   const directory = entry?.path || '';
-  renderDirectory(directory);
-  const readme = repository.entries.find(item => item.parent === directory && item.type === 'file' && /^readme\.md$/i.test(item.name));
-  readme ? renderFile(readme, { landing: true }) : renderEmptyPanel();
+  renderDirectoryPanel(directory);
 }
 
 function renderError(message) {
-  elements.directoryList.replaceChildren();
+  elements.repositoryTree.replaceChildren();
   elements.directoryStatus.hidden = false;
   elements.directoryStatus.textContent = message;
   renderEmptyPanel('Repository unavailable', 'Please refresh the page or view the original repository on GitHub.');
