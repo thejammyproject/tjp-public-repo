@@ -1,4 +1,4 @@
-import { buildBreadcrumbs, entriesForDirectory, entriesFromGitTree, githubUrl, isMarkdown, normaliseRepositoryPath, rawGithubUrl, relativeTime } from './repository-core.js';
+import { buildBreadcrumbs, entriesForDirectory, entriesFromGitTree, githubUrl, isMarkdown, normaliseRepositoryPath, rawGithubUrl, relativeTime } from './repository-core.js?v=1.1';
 
 const elements = {
   title: document.getElementById('repository-title'),
