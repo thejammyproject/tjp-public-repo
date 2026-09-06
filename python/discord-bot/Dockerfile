@@ -7,10 +7,10 @@ WORKDIR /app
 
 RUN useradd --uid 10001 --create-home bot
 
-COPY requirements.txt ./
+COPY python/discord-bot/requirements.txt ./
 RUN pip install --no-cache-dir --requirement requirements.txt
 
-COPY --chown=bot:bot . .
+COPY --chown=bot:bot python/discord-bot/ .
 RUN mkdir -p lostark/logs && chown -R bot:bot /app
 
 USER 10001

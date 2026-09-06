@@ -1,0 +1,24 @@
+# Only the two containerised applications belong in the shared build context.
+/*
+!/python
+!/python/discord-bot
+!/python/discord-bot/**
+!/website
+!/website/thejammyproject
+!/website/thejammyproject/**
+
+# Discord bot secrets and generated runtime data.
+/python/discord-bot/.ssh
+/python/discord-bot/.tls
+/python/discord-bot/.env
+/python/discord-bot/**/__pycache__
+/python/discord-bot/**/*.py[cod]
+/python/discord-bot/**/*.log
+/python/discord-bot/lostark/sql
+
+# Website development and infrastructure-only files.
+/website/thejammyproject/terraform
+/website/thejammyproject/**/*.tf
+/website/thejammyproject/**/.terraform
+/website/thejammyproject/**/.terraform.lock.hcl
+/website/thejammyproject/README.md
