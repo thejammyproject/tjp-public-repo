@@ -1,3 +1,6 @@
+# Local SOPS configuration.
+.sops.yaml
+
 # Decrypted temp files
 .decrypted~*
 *.decrypted~*
