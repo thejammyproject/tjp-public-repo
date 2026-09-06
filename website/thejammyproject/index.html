@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Site CSS -->
-  <link rel="stylesheet" href="styles.css?v=1.22">
+  <link rel="stylesheet" href="styles.css?v=1.23">
 </head>
 <body>
   <header>
@@ -40,19 +40,66 @@
 
   <main class="container">
     <section class="hero" id="about">
-      <p class="chip">Infrastructure as Code • AWS • Automation</p>
-      <h1>Infrastructure Engineer & Team Lead focused on reliable, secure cloud platforms with Terraform, AWS, and automation.</h1>
-      <p>I'm <strong>James Shaw</strong>, an Infrastructure Engineer and current Infrastructure Team Lead with 8+ years across cloud, automation, and systems administration.
-        I specialise in AWS, Terraform, Windows & SQL Server, and monitoring—driving automation-first, security-first practices.</p>
-        <p>This website runs on AWS ECS.</p>
-      <div class="chiprow" aria-label="Highlights">
-        <span class="chip">AWS (EC2, VPC, ALB, Route53, IAM)</span>
-        <span class="chip">Azure (VMs, PIM, FrontDoor, NSGs/Firewalls, AKS)</span>
-        <span class="chip">Terraform & Ansible</span>
-        <span class="chip">Windows Server 2019-2022 (CIS L1)</span>
-        <span class="chip">SQL Server Clustering</span>
-        <span class="chip">Monitoring: Elastic, Grafana, Zabbix, Splunk</span>
-        <span class="chip">Octopus Deploy • CI/CD</span>
+      <svg class="hero-network" viewBox="0 0 1120 620" preserveAspectRatio="none" aria-hidden="true">
+        <g class="network-lines">
+          <path d="M30 120 230 70 430 170 650 78 870 150 1080 72" />
+          <path d="M55 405 245 320 430 410 650 290 875 390 1085 300" />
+          <path d="M230 70 245 320M430 170 430 410M650 78 650 290M870 150 875 390" />
+          <path d="M30 120 430 410M245 320 650 78M430 170 875 390M650 290 1080 72" />
+        </g>
+        <g class="network-nodes">
+          <circle cx="30" cy="120" r="5"/><circle cx="230" cy="70" r="5"/><circle cx="430" cy="170" r="5"/>
+          <circle cx="650" cy="78" r="5"/><circle cx="870" cy="150" r="5"/><circle cx="1080" cy="72" r="5"/>
+          <circle cx="55" cy="405" r="5"/><circle cx="245" cy="320" r="5"/><circle cx="430" cy="410" r="5"/>
+          <circle cx="650" cy="290" r="5"/><circle cx="875" cy="390" r="5"/><circle cx="1085" cy="300" r="5"/>
+        </g>
+      </svg>
+
+      <div class="hero-layout">
+        <div class="hero-copy">
+          <p class="eyebrow">Cloud · Infrastructure · Platform Engineering</p>
+          <h1>Reliable infrastructure,<br><span>built with automation.</span></h1>
+          <p>I'm <strong>James Shaw</strong>, an Infrastructure Team Lead with over eight years of experience building, securing and operating cloud and on-premise platforms across Linux and Windows environments.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">Explore my platform</a>
+            <a class="btn" href="repository.html">Browse the repository →</a>
+          </div>
+          <p class="hero-status"><span aria-hidden="true"></span>Current build · three-node RKE2 platform</p>
+        </div>
+
+        <div class="platform-preview" aria-label="Self-hosted platform overview">
+          <div class="preview-toolbar">
+            <span class="preview-mark">TJP</span>
+            <span>Platform overview</span>
+            <span class="preview-environment">Homelab</span>
+          </div>
+          <div class="preview-grid">
+            <div><span>RKE2 nodes</span><strong>3 / 3</strong><small>Control plane + etcd</small></div>
+            <div><span>Secrets</span><strong>Vault HA</strong><small>Three-node Raft</small></div>
+            <div><span>Database</span><strong>PostgreSQL 18</strong><small>CloudNativePG</small></div>
+            <div><span>Delivery</span><strong>GitOps</strong><small>Argo CD + Actions</small></div>
+          </div>
+          <div class="preview-chart">
+            <div class="chart-heading"><span>Platform automation</span><small>Infrastructure lifecycle</small></div>
+            <svg viewBox="0 0 500 120" preserveAspectRatio="none" aria-hidden="true">
+              <defs><linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a855f7" stop-opacity=".35"/><stop offset="1" stop-color="#a855f7" stop-opacity="0"/></linearGradient></defs>
+              <path class="chart-area" d="M0 104 C55 98 70 80 120 84 S190 54 240 66 310 34 350 45 430 17 500 24 L500 120 0 120Z"/>
+              <path class="chart-line" d="M0 104 C55 98 70 80 120 84 S190 54 240 66 310 34 350 45 430 17 500 24"/>
+            </svg>
+          </div>
+          <div class="preview-activity">
+            <span><i></i>Encrypted storage</span>
+            <span><i></i>Automated recovery</span>
+            <span><i></i>Policy enforcement</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-facts" aria-label="Professional highlights">
+        <div><strong>8+ years</strong><span>Infrastructure experience</span></div>
+        <div><strong>AWS + Azure</strong><span>Cloud platforms</span></div>
+        <div><strong>Terraform + Ansible</strong><span>Automation first</span></div>
+        <div><strong>Team leadership</strong><span>Operations and mentoring</span></div>
       </div>
     </section>
 
