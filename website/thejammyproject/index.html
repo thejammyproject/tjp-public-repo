@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Site CSS -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=1.19">
 </head>
 <body>
   <header>
@@ -107,31 +107,31 @@
       <p class="section-intro">Select a role to see the full responsibilities and achievements.</p>
       <ul class="timeline">
         <li class="item">
-          <button class="role-title" type="button" data-dialog="role-creovai">Infrastructure Team Lead</button> — Creovai (formerly Awaken Intelligence), Remote (Mar 2025 – Present)
+          <button class="role-title" type="button" data-role="creovai">Infrastructure Team Lead</button> — Creovai (formerly Awaken Intelligence), Remote (Mar 2025 – Present)
           <div class="muted">Lead infra operations, manage overseas engineers, optimise on-call, mentor team, and drive automation-first practices.</div>
         </li>
         <li class="item">
-          <button class="role-title" type="button" data-dialog="role-creovai">Infrastructure Engineer</button> — Creovai (formerly Awaken Intelligence), Remote (Jun 2021 – Feb 2025)
+          <button class="role-title" type="button" data-role="creovai">Infrastructure Engineer</button> — Creovai (formerly Awaken Intelligence), Remote (Jun 2021 – Feb 2025)
           <div class="muted">Automated infrastructure with Terraform & Ansible; designed SQL Server clusters; maintained Windows Server 2022 (CIS L1); monitoring (Elastic, Grafana, Corelogix); AWS DLM backups; Octopus Deploy; security-first designs with TLS, proxies & VPNs.</div>
         </li>
         <li class="item">
-          <button class="role-title" type="button" data-dialog="role-creovai">Junior Infrastructure Engineer</button> — Creovai (formerly Awaken Intelligence), Remote (Dec 2020 – Jun 2021)
+          <button class="role-title" type="button" data-role="creovai">Junior Infrastructure Engineer</button> — Creovai (formerly Awaken Intelligence), Remote (Dec 2020 – Jun 2021)
           <div class="muted">Progressed from technical support into cloud infrastructure, systems administration and automation.</div>
         </li>
         <li class="item">
-          <button class="role-title" type="button" data-dialog="role-bcn">1st Line Support Engineer</button> — BCN Group, Manchester (Aug 2020 – Dec 2020)
+          <button class="role-title" type="button" data-role="bcn-group">1st Line Support Engineer</button> — BCN Group, Manchester (Aug 2020 – Dec 2020)
           <div class="muted">Frontline support, M365 admin, remote installs and triage.</div>
         </li>
         <li class="item">
-          <button class="role-title" type="button" data-dialog="role-cloud53">IT Support Engineer</button> — Cloud53, Manchester (Nov 2019 – Jul 2020)
+          <button class="role-title" type="button" data-role="cloud53">IT Support Engineer</button> — Cloud53, Manchester (Nov 2019 – Jul 2020)
           <div class="muted">1st–3rd line support, Windows Servers/AD/Exchange, WatchGuard firewalls, monitoring.</div>
         </li>
         <li class="item">
-          <button class="role-title" type="button" data-dialog="role-ukfast">Technical Support Engineer</button> — UKFast, Manchester (Jun 2018 – Oct 2019)
+          <button class="role-title" type="button" data-role="ukfast">Technical Support Engineer</button> — UKFast, Manchester (Jun 2018 – Oct 2019)
           <div class="muted">Supported Linux & Windows, VMware/Hyper-V, enterprise backups (Bacula, Commvault), documentation, Grafana & Zabbix.</div>
         </li>
         <li class="item">
-          <button class="role-title" type="button" data-dialog="role-sia">Service Delivery Specialist</button> — Secure Information Assurance, Manchester (Nov 2016 – Jun 2018)
+          <button class="role-title" type="button" data-role="secure-information-assurance">Service Delivery Specialist</button> — Secure Information Assurance, Manchester (Nov 2016 – Jun 2018)
           <div class="muted">Infrastructure support in security-focused environments; Zabbix & Splunk; Veritas Backup; Sophos AV; monthly service reports.</div>
         </li>
       </ul>
@@ -175,41 +175,11 @@
       </div>
     </section>
 
-    <dialog class="role-dialog" id="role-creovai" aria-labelledby="role-creovai-title">
-      <div class="dialog-header">
-        <div><p class="eyebrow">Creovai by Capacity · Remote</p><h2 id="role-creovai-title">Infrastructure Team Lead</h2><p class="muted">Progressed from Junior Infrastructure Engineer to Infrastructure Team Lead · Dec 2020 – Present</p></div>
-        <button class="dialog-close" type="button" aria-label="Close role details">×</button>
+    <dialog class="role-dialog" id="role-dialog" aria-labelledby="role-dialog-title">
+      <button class="dialog-close" type="button" aria-label="Close role details">×</button>
+      <div id="role-dialog-content" aria-live="polite">
+        <h2 id="role-dialog-title">Loading role details…</h2>
       </div>
-      <ul>
-        <li>Lead infrastructure operations, including overseas engineers and on-call support processes.</li>
-        <li>Drive automation-first provisioning, configuration management and deployment using Terraform and Ansible.</li>
-        <li>Manage AWS services including EC2, VPC, ALB, Route 53, IAM, CloudWatch, S3, RDS and Managed Active Directory.</li>
-        <li>Administer Ubuntu and Windows Server environments with CIS Level 1 hardening and patch management.</li>
-        <li>Design and maintain SQL Server clusters, MariaDB Multi-AZ, MySQL and Amazon RDS infrastructure.</li>
-        <li>Operate HashiCorp Vault, backup and retention automation, Octopus Deploy and Apache NiFi infrastructure.</li>
-        <li>Monitor production services with Grafana, Elasticsearch, Coralogix, Prometheus and Alertmanager.</li>
-        <li>Deliver security-focused infrastructure using VPNs, proxies, TLS services, PowerShell and Bash.</li>
-      </ul>
-    </dialog>
-
-    <dialog class="role-dialog" id="role-bcn" aria-labelledby="role-bcn-title">
-      <div class="dialog-header"><div><p class="eyebrow">BCN Group · Manchester</p><h2 id="role-bcn-title">1st Line Support Engineer</h2><p class="muted">Aug 2020 – Dec 2020</p></div><button class="dialog-close" type="button" aria-label="Close role details">×</button></div>
-      <ul><li>Provided first-line support across Microsoft-based environments.</li><li>Managed Microsoft 365 administration, users and software deployment.</li><li>Resolved incidents and escalated complex issues to specialist teams.</li><li>Gained infrastructure administration experience supporting progression into engineering.</li></ul>
-    </dialog>
-
-    <dialog class="role-dialog" id="role-cloud53" aria-labelledby="role-cloud53-title">
-      <div class="dialog-header"><div><p class="eyebrow">Cloud53 · Manchester</p><h2 id="role-cloud53-title">IT Support Engineer</h2><p class="muted">Nov 2019 – Jul 2020</p></div><button class="dialog-close" type="button" aria-label="Close role details">×</button></div>
-      <ul><li>Delivered first- to third-line support across customer environments.</li><li>Administered Windows Server, Active Directory and Microsoft Exchange.</li><li>Supported and maintained WatchGuard firewall estates.</li><li>Assisted with monitoring, troubleshooting and infrastructure maintenance.</li></ul>
-    </dialog>
-
-    <dialog class="role-dialog" id="role-ukfast" aria-labelledby="role-ukfast-title">
-      <div class="dialog-header"><div><p class="eyebrow">UKFast · Manchester</p><h2 id="role-ukfast-title">Technical Support Engineer</h2><p class="muted">Jun 2018 – Oct 2019</p></div><button class="dialog-close" type="button" aria-label="Close role details">×</button></div>
-      <ul><li>Supported Linux and Windows hosting environments.</li><li>Investigated infrastructure incidents through troubleshooting and root-cause analysis.</li><li>Worked with VMware, Hyper-V and cloud-hosted platforms.</li><li>Supported Bacula and Commvault enterprise backup solutions.</li><li>Produced technical documentation and supported Grafana and Zabbix monitoring.</li></ul>
-    </dialog>
-
-    <dialog class="role-dialog" id="role-sia" aria-labelledby="role-sia-title">
-      <div class="dialog-header"><div><p class="eyebrow">Secure Information Assurance · Manchester</p><h2 id="role-sia-title">Service Delivery Specialist</h2><p class="muted">Nov 2016 – Jun 2018</p></div><button class="dialog-close" type="button" aria-label="Close role details">×</button></div>
-      <ul><li>Managed and maintained Zabbix and Splunk monitoring environments.</li><li>Supported Veritas Backup Exec and Sophos endpoint security.</li><li>Produced monthly customer reports and service metrics.</li><li>Assisted with operational support, monitoring and service delivery.</li></ul>
     </dialog>
   </main>
 
@@ -236,6 +206,6 @@
   </script>
 
   <!-- Site JS -->
-  <script src="main.js" defer></script>
+  <script src="main.js?v=1.19" defer></script>
 </body>
 </html>
