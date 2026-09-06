@@ -1,6 +1,3 @@
-# SOPS config should be tracked
-.sops.yaml
-
 # Decrypted temp files
 .decrypted~*
 *.decrypted~*
@@ -8,22 +5,13 @@
 # Plaintext credentials and private keys must be stored through SOPS.
 .env
 .env.*
-!.env.example
 *.key
 *.pem
 
 # Runtime output may contain addresses, requests, or tokens.
 *.log
 
-# Discord bot generated runtime data.
-/python/discord-bot/**/__pycache__/
-/python/discord-bot/**/*.py[cod]
-/python/discord-bot/**/*.py_old
-/python/discord-bot/lostark/logs/
-/python/discord-bot/lostark/sql/
-
-# Discord bot local credentials and editor files.
-/python/discord-bot/.ssh/
-/python/discord-bot/.tls/
-/python/discord-bot/.vscode/
-/python/discord-bot/.idea/
+# Python generated files used by the Discord bot.
+__pycache__/
+*.py[cod]
+*.py_old
