@@ -16,8 +16,12 @@
 
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
+html{min-height:100%}
 
 body{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
   background:
     radial-gradient(1200px 1200px at 15% -10%, rgba(192,132,252,.14), transparent 60%),
@@ -26,6 +30,8 @@ body{
   color: var(--text);
   line-height:1.6;
 }
+
+main{width:100%;flex:1}
 
 a{color:var(--primary);text-decoration:none}
 a:hover{text-decoration:underline}
@@ -52,6 +58,7 @@ header{
 
 .nav{display:flex;align-items:center;justify-content:space-between;padding:.85rem 0}
 .brand{display:flex;align-items:center;gap:.75rem;font-weight:700}
+.brand,.brand:hover{color:var(--text);text-decoration:none}
 .brand img{height:36px;width:36px;border-radius:10px;object-fit:cover;box-shadow:var(--shadow);border:1px solid rgba(148,163,184,.25)}
 .brand span{letter-spacing:.3px}
 
@@ -59,7 +66,7 @@ header{
 .menu a{padding:.45rem .7rem;border-radius:12px}
 .menu a:hover{background:rgba(148,163,184,.12)}
 
-.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1rem;border-radius:14px;border:1px solid rgba(148,163,184,.25);background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));box-shadow:var(--shadow)}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1rem;border-radius:14px;border:1px solid rgba(148,163,184,.25);background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));box-shadow:var(--shadow);color:var(--primary);cursor:pointer;font:inherit}
 .btn:hover{border-color:rgba(139,92,246,.6);box-shadow:0 8px 35px var(--ring)}
 
 .hero{padding:5.5rem 0 3rem}
@@ -76,15 +83,37 @@ section{padding:2.2rem 0}
 
 .muted{color:var(--muted)}
 
-.timeline{position:relative;padding-left:1.2rem}
+.section-intro{max-width:62ch;color:var(--muted);margin-top:-.5rem}
+.timeline{position:relative;padding-left:1.2rem;list-style:none}
 .timeline::before{content:"";position:absolute;left:.45rem;top:0;bottom:0;width:2px;background:linear-gradient(var(--accent), transparent)}
 .timeline .item{position:relative;margin:1rem 0;padding-left:.6rem}
 .timeline .item::before{content:"";position:absolute;left:-.2rem;top:.4rem;height:10px;width:10px;border-radius:999px;background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:0 0 0 4px rgba(139,92,246,.15)}
 
+.role-link{margin-top:.55rem;padding:0;border:0;background:none;color:var(--primary);font:inherit;font-weight:600;cursor:pointer}
+.role-link:hover{text-decoration:underline}
+
+.role-dialog{width:min(720px,calc(100% - 2rem));max-height:min(82vh,760px);padding:1.4rem;border:1px solid rgba(148,163,184,.25);border-radius:var(--radius);background:var(--card);color:var(--text);box-shadow:var(--shadow)}
+.role-dialog::backdrop{background:rgba(3,4,12,.78);backdrop-filter:blur(4px)}
+.role-dialog h2,.role-dialog .eyebrow{margin:0}
+.role-dialog ul{padding-left:1.25rem}
+.role-dialog li+li{margin-top:.65rem}
+.dialog-header{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding-bottom:.8rem;border-bottom:1px solid rgba(148,163,184,.15)}
+.dialog-close{flex:0 0 auto;width:42px;height:42px;border-radius:12px;border:1px solid rgba(148,163,184,.25);background:rgba(255,255,255,.03);color:var(--text);font:inherit;font-size:1.5rem;line-height:1;cursor:pointer}
+.dialog-close:hover{border-color:var(--primary)}
+
+.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.75rem;font-weight:700;color:#a9bfe8}
+.archive-hero{padding-bottom:1.2rem}
+.archive-card{position:relative;overflow:hidden}
+.archive-card .chip{display:inline-block;margin-bottom:.8rem}
+.archive-card h2{margin:.1rem 0 .4rem}
+.archive-card ul{padding-left:1.2rem;color:var(--muted)}
+
+:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+
 input, textarea{width:100%;padding:.85rem 1rem;border-radius:12px;border:1px solid rgba(148,163,184,.25);background:#121225;color:var(--text)}
 input:focus, textarea:focus{outline:none;box-shadow:0 0 0 6px var(--ring);border-color:var(--primary)}
 
-footer{padding:2rem 0;color:var(--muted);border-top:1px solid rgba(148,163,184,.15)}
+footer{margin-top:auto;padding:2rem 0;color:var(--muted);border-top:1px solid rgba(148,163,184,.15)}
 
 /* -------------------- Mobile menu / hamburger -------------------- */
 .hamburger{

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Project Archive — James Shaw</title>
+  <meta name="description" content="Archived homelab and infrastructure projects by James Shaw, including Proxmox, k3s, Jenkins and OpenStack." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="index.html" aria-label="James Shaw home">
+        <img src="images/tjp-logo.png" alt="" />
+        <span>JAMES SHAW</span>
+      </a>
+      <button class="hamburger" id="navToggle" aria-expanded="false" aria-controls="site-menu" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <nav class="menu" id="site-menu" aria-label="Site navigation">
+        <a href="index.html#about">About</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#projects">Projects</a>
+        <a href="repository.html">Repository</a>
+        <a href="archive.html" aria-current="page">Archive</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero archive-hero">
+      <p class="chip">Previous homelab work</p>
+      <h1>Project Archive</h1>
+      <p>Earlier environments that are no longer in active use, retained to show the progression of my infrastructure, automation and platform-engineering experience.</p>
+    </section>
+
+    <section aria-labelledby="archive-projects-title">
+      <h2 id="archive-projects-title">Archived environments</h2>
+      <div class="grid">
+        <article class="card span-6 archive-card">
+          <span class="chip">Archived</span>
+          <h2>Proxmox VE and k3s Cluster</h2>
+          <p class="muted">A three-node Kubernetes homelab running on Proxmox VE, built as the predecessor to my current RKE2 platform.</p>
+          <ul>
+            <li>Provisioned virtual machines with Terraform.</li>
+            <li>Automated k3s installation and node configuration with Ansible.</li>
+            <li>Deployed applications using Helm and Bash.</li>
+            <li>Managed secrets using SOPS.</li>
+            <li>Published services through Cloudflare DNS and Cloudflare Tunnel.</li>
+            <li>Hosted the CV site and BookStack documentation.</li>
+          </ul>
+        </article>
+
+        <article class="card span-6 archive-card">
+          <span class="chip">Archived</span>
+          <h2>Jenkins Automation Lab</h2>
+          <p class="muted">A learning environment used to develop practical CI/CD and infrastructure-automation experience before moving current workloads to GitHub Actions and Argo CD.</p>
+          <ul>
+            <li>Explored repeatable build and deployment pipelines.</li>
+            <li>Connected source-control changes to automated infrastructure tasks.</li>
+            <li>Used the project to compare traditional pipeline management with later GitOps workflows.</li>
+          </ul>
+        </article>
+
+        <article class="card span-6 archive-card">
+          <span class="chip">Archived</span>
+          <h2>OpenStack Homelab</h2>
+          <p class="muted">A rebuilt homelab environment focused on private-cloud concepts and self-service infrastructure.</p>
+          <ul>
+            <li>Provisioned virtual machines, networks and security groups.</li>
+            <li>Developed practical understanding of cloud control-plane and tenant networking concepts.</li>
+            <li>Used lessons from the environment in the design of the current self-hosted cloud platform.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div>© <span id="year"></span> James Shaw • The Jammy Project</div>
+      <div class="muted">Static, fast, and privacy-friendly. No cookies. No tracking.</div>
+    </div>
+  </footer>
+
+  <script src="main.js" defer></script>
+</body>
+</html>
