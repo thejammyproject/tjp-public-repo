@@ -1,4 +1,4 @@
-import { buildBreadcrumbs, entriesForDirectory, entriesFromGitTree, githubUrl, isMarkdown, normaliseRepositoryPath, rawGithubUrl } from './repository-core.js';
+import { buildBreadcrumbs, entriesForDirectory, entriesFromGitTree, githubUrl, isMarkdown, normaliseRepositoryPath, rawGithubUrl, relativeTime } from './repository-core.js';
 
 const elements = {
   title: document.getElementById('repository-title'),
@@ -6,6 +6,7 @@ const elements = {
   meta: document.getElementById('repository-meta'),
   repositoryLink: document.getElementById('repository-github-link'),
   currentLink: document.getElementById('current-github-link'),
+  syncStatus: document.getElementById('sync-status'),
   breadcrumbs: document.getElementById('breadcrumbs'),
   directoryStatus: document.getElementById('directory-status'),
   repositoryTree: document.getElementById('repository-tree'),
@@ -14,7 +15,13 @@ const elements = {
 
 let repository;
 let currentPath = '';
+let apiBase;
+let apiOptions;
+let lastSyncedAt = 0;
+let refreshInFlight;
+const entryTimestampCache = new Map();
 const expandedDirectories = new Set(['']);
+const AUTO_SYNC_INTERVAL = 300_000;
 
 function setUrl(path) {
   const url = new URL(window.location.href);
@@ -127,14 +134,15 @@ function createDirectoryListing(directory) {
   table.className = 'directory-table';
   const tableHeader = document.createElement('div');
   tableHeader.className = 'directory-table-header';
-  tableHeader.innerHTML = '<span>Name</span><span>Type</span><span>Size</span>';
+  tableHeader.innerHTML = '<span>Name</span><span>Type</span><span>Size</span><span>Updated</span>';
   table.append(tableHeader);
+  const timeTargets = new Map();
 
   if (directory) {
     const item = document.createElement('div');
     const parentPath = directory.split('/').slice(0, -1).join('/');
     const button = createPathButton('..', parentPath, 'directory-row');
-    button.replaceChildren(iconForEntry({ type: 'directory' }), document.createTextNode('..'), document.createElement('span'), document.createElement('span'));
+    button.replaceChildren(iconForEntry({ type: 'directory' }), document.createTextNode('..'), document.createElement('span'), document.createElement('span'), document.createElement('span'));
     item.append(button);
     table.append(item);
   }
@@ -153,7 +161,11 @@ function createDirectoryListing(directory) {
     const size = document.createElement('span');
     size.className = 'directory-size';
     size.textContent = entry.type === 'directory' ? '—' : formatBytes(entry.size);
-    button.replaceChildren(icon, label, type, size);
+    const updated = document.createElement('span');
+    updated.className = 'directory-updated';
+    updated.textContent = '…';
+    button.replaceChildren(icon, label, type, size, updated);
+    timeTargets.set(entry.path, updated);
     button.setAttribute('aria-label', `${entry.type === 'directory' ? 'Open folder' : 'Open file'} ${entry.name}`);
     item.append(button);
     table.append(item);
@@ -166,7 +178,33 @@ function createDirectoryListing(directory) {
     table.append(empty);
   }
   wrapper.append(table);
-  return wrapper;
+  return { wrapper, children, timeTargets };
+}
+
+async function entryTimestamp(path) {
+  if (entryTimestampCache.has(path)) return entryTimestampCache.get(path);
+  const query = new URLSearchParams({ sha: repository.config.branch, path, per_page: '1' });
+  try {
+    const response = await fetch(`${apiBase}/commits?${query}`, apiOptions);
+    if (!response.ok) throw new Error('Commit history unavailable');
+    const commits = await response.json();
+    const timestamp = commits[0]?.commit?.author?.date || null;
+    entryTimestampCache.set(path, timestamp);
+    return timestamp;
+  } catch {
+    entryTimestampCache.set(path, null);
+    return null;
+  }
+}
+
+async function hydrateDirectoryTimes(children, timeTargets, directory) {
+  await Promise.all(children.map(async entry => {
+    const timestamp = await entryTimestamp(entry.path);
+    if (currentPath !== directory || !timeTargets.get(entry.path)?.isConnected) return;
+    const target = timeTargets.get(entry.path);
+    target.textContent = timestamp ? relativeTime(timestamp) : '—';
+    if (timestamp) target.title = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(timestamp));
+  }));
 }
 
 function formatBytes(bytes = 0) {
@@ -215,8 +253,9 @@ async function renderFile(entry, { landing = false } = {}) {
 }
 
 async function renderDirectoryPanel(directory) {
-  const listing = createDirectoryListing(directory);
+  const { wrapper: listing, children, timeTargets } = createDirectoryListing(directory);
   elements.filePanel.replaceChildren(listing);
+  hydrateDirectoryTimes(children, timeTargets, directory);
   const readme = repository.entries.find(item => item.parent === directory && item.type === 'file' && /^readme\.md$/i.test(item.name));
   if (!readme?.viewable) return;
 
@@ -312,40 +351,70 @@ function renderError(message) {
   renderEmptyPanel('Repository unavailable', 'Please refresh the page or view the original repository on GitHub.');
 }
 
+function updateSyncStatus(message) {
+  elements.syncStatus.textContent = message || (lastSyncedAt ? `Synced ${relativeTime(lastSyncedAt)} · Auto-sync on` : 'Connecting to GitHub…');
+}
+
+async function refreshRepository(config, { initial = false } = {}) {
+  if (refreshInFlight) return refreshInFlight;
+  refreshInFlight = (async () => {
+    updateSyncStatus('Syncing with GitHub…');
+    try {
+      const requests = [
+        fetch(`${apiBase}/git/trees/${encodeURIComponent(config.branch)}?recursive=1`, apiOptions),
+        fetch(`${apiBase}/commits?sha=${encodeURIComponent(config.branch)}&per_page=1`, apiOptions)
+      ];
+      if (initial) requests.unshift(fetch(apiBase, apiOptions));
+      const responses = await Promise.all(requests);
+      if (!responses.every(response => response.ok)) throw new Error('GitHub API unavailable');
+      const payloads = await Promise.all(responses.map(response => response.json()));
+      const metadata = initial ? payloads[0] : null;
+      const treeData = payloads[initial ? 1 : 0];
+      const commits = payloads[initial ? 2 : 1];
+      if (treeData.truncated) throw new Error('GitHub returned a truncated repository tree');
+      const commit = commits[0];
+      const previousSha = repository?.headSha;
+      repository = { config, entries: entriesFromGitTree(treeData.tree, config.maxFileSize), headSha: commit.sha };
+      if (previousSha && previousSha !== commit.sha) entryTimestampCache.clear();
+      const files = repository.entries.filter(entry => entry.type === 'file').length;
+      if (initial) {
+        elements.title.textContent = config.title;
+        elements.description.textContent = metadata.description || config.description;
+        elements.repositoryLink.href = githubUrl(config);
+      }
+      const updated = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(commit.commit.author.date));
+      elements.meta.textContent = `${config.owner}/${config.repo} · ${config.branch} · ${files} files · Updated ${updated} · ${commit.sha.slice(0, 7)} — ${commit.commit.message.split('\n')[0]}`;
+      lastSyncedAt = Date.now();
+      updateSyncStatus();
+      renderLocation();
+    } catch {
+      if (!repository) renderError('GitHub is unavailable or has rate-limited this connection. Please try again shortly.');
+      updateSyncStatus(repository ? 'Sync delayed · GitHub unavailable' : 'Unable to connect to GitHub');
+    } finally {
+      refreshInFlight = null;
+    }
+  })();
+  return refreshInFlight;
+}
+
 async function initialise() {
   try {
     const configResponse = await fetch('repository-config.json', { cache: 'default' });
     if (!configResponse.ok) throw new Error('Configuration unavailable');
     const config = await configResponse.json();
-    const apiBase = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}`;
-    const apiOptions = {
+    apiBase = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}`;
+    apiOptions = {
       cache: 'default',
       headers: { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' }
     };
-    const [metadataResponse, treeResponse, commitsResponse] = await Promise.all([
-      fetch(apiBase, apiOptions),
-      fetch(`${apiBase}/git/trees/${encodeURIComponent(config.branch)}?recursive=1`, apiOptions),
-      fetch(`${apiBase}/commits?sha=${encodeURIComponent(config.branch)}&per_page=1`, apiOptions)
-    ]);
-    if (![metadataResponse, treeResponse, commitsResponse].every(response => response.ok)) {
-      throw new Error('GitHub API unavailable');
-    }
-    const [metadata, treeData, commits] = await Promise.all([
-      metadataResponse.json(), treeResponse.json(), commitsResponse.json()
-    ]);
-    if (treeData.truncated) throw new Error('GitHub returned a truncated repository tree');
-    repository = { config, entries: entriesFromGitTree(treeData.tree, config.maxFileSize) };
-    const commit = commits[0];
-    const files = repository.entries.filter(entry => entry.type === 'file').length;
-    elements.title.textContent = config.title;
-    elements.description.textContent = metadata.description || config.description;
-    elements.repositoryLink.href = githubUrl(config);
-    const updated = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(commit.commit.author.date));
-    elements.meta.textContent = `${config.owner}/${config.repo} · ${config.branch} · ${files} files · Updated ${updated} · ${commit.sha.slice(0, 7)} — ${commit.commit.message.split('\n')[0]}`;
-    let initialPath = '';
-    try { initialPath = normaliseRepositoryPath(new URLSearchParams(location.search).get('path') || ''); }
+    try { currentPath = normaliseRepositoryPath(new URLSearchParams(location.search).get('path') || ''); }
     catch { renderError('That repository path is not valid.'); return; }
-    navigate(initialPath, true);
+    await refreshRepository(config, { initial: true });
+    setInterval(() => refreshRepository(config), AUTO_SYNC_INTERVAL);
+    setInterval(() => updateSyncStatus(), 60_000);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && Date.now() - lastSyncedAt >= AUTO_SYNC_INTERVAL) refreshRepository(config);
+    });
   } catch {
     renderError('GitHub is unavailable or has rate-limited this connection. Please try again shortly.');
   }
