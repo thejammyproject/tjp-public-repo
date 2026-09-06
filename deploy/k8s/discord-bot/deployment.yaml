@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: discord-bot
-          image: jammyuk/tjp-discord-bot:bootstrap
+          image: jammyuk/tjp-discord-bot@sha256:00bfe9daf379d42a5c944502b41b94fcd64c808144402f3246c6af18a9b55b9e
           imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
