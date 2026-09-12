@@ -1,0 +1,27 @@
+:root {
+  --md-primary-fg-color: #17252f;
+  --md-accent-fg-color: #00a7b5;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color: #10171d;
+  --md-code-bg-color: #182229;
+}
+
+.md-header {
+  border-bottom: 1px solid rgb(127 127 127 / 20%);
+}
+
+.md-typeset h1 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.md-typeset h2 {
+  border-bottom: 1px solid rgb(127 127 127 / 20%);
+  padding-bottom: 0.3rem;
+}
+
+.md-typeset code {
+  border-radius: 0.25rem;
+}
