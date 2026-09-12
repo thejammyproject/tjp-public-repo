@@ -1,4 +1,4 @@
-# Only the two containerised applications belong in the shared build context.
+# Only the containerised applications belong in the shared build context.
 /*
 !/python
 !/python/discord-bot
@@ -6,6 +6,8 @@
 !/website
 !/website/thejammyproject
 !/website/thejammyproject/**
+!/website/docs.thejammyproject.internal
+!/website/docs.thejammyproject.internal/**
 
 # Discord bot secrets and generated runtime data.
 /python/discord-bot/.ssh
@@ -22,3 +24,4 @@
 /website/thejammyproject/**/.terraform
 /website/thejammyproject/**/.terraform.lock.hcl
 /website/thejammyproject/README.md
+/website/docs.thejammyproject.internal/README.md
