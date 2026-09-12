@@ -10,7 +10,7 @@ theme:
   language: en
   features:
     - navigation.instant
-    - navigation.sections
+    - navigation.indexes
     - navigation.top
     - navigation.footer
     - search.highlight
@@ -53,33 +53,36 @@ extra_css:
 
 nav:
   - Home: index.md
-  - Linux CLI:
-      - awk: linux/cli/awk.md
-      - Bash basics: linux/cli/bash-basics.md
-      - CPU and load: linux/cli/cpu-load.md
-      - Cron and systemd timers: linux/cli/cron-and-systemd-timers.md
-      - curl: linux/cli/curl.md
-      - cut, sort, uniq, and tr: linux/cli/cut-sort-uniq-tr.md
-      - Disk and storage: linux/cli/disk-storage.md
-      - DNS: linux/cli/dns.md
-      - find: linux/cli/find.md
-      - grep: linux/cli/grep.md
-      - journalctl: linux/cli/journalctl.md
-      - jq: linux/cli/jq.md
-      - less, head, tail, and wc: linux/cli/less-head-tail-wc.md
-      - Linux filesystem: linux/cli/linux-filesystem.md
-      - Logs and troubleshooting: linux/cli/logs-troubleshooting.md
-      - Memory: linux/cli/memory.md
-      - Networking: linux/cli/networking.md
-      - Permissions: linux/cli/permissions.md
-      - Pipes and redirection: linux/cli/pipes-redirection.md
-      - proc filesystem: linux/cli/proc-filesystem.md
-      - Processes: linux/cli/processes.md
-      - rsync: linux/cli/rsync.md
-      - sed: linux/cli/sed.md
-      - Signals: linux/cli/signals.md
-      - SSH: linux/cli/ssh.md
-      - systemd: linux/cli/systemd.md
-      - tar, gzip, and ZIP: linux/cli/tar-gzip-zip.md
-      - Users and groups: linux/cli/users-groups.md
-      - xargs: linux/cli/xargs.md
+  - Linux:
+      - linux/index.md
+      - CLI:
+          - linux/cli/index.md
+          - awk: linux/cli/awk.md
+          - Bash basics: linux/cli/bash-basics.md
+          - CPU and load: linux/cli/cpu-load.md
+          - Cron and systemd timers: linux/cli/cron-and-systemd-timers.md
+          - curl: linux/cli/curl.md
+          - cut, sort, uniq, and tr: linux/cli/cut-sort-uniq-tr.md
+          - Disk and storage: linux/cli/disk-storage.md
+          - DNS: linux/cli/dns.md
+          - find: linux/cli/find.md
+          - grep: linux/cli/grep.md
+          - journalctl: linux/cli/journalctl.md
+          - jq: linux/cli/jq.md
+          - less, head, tail, and wc: linux/cli/less-head-tail-wc.md
+          - Linux filesystem: linux/cli/linux-filesystem.md
+          - Logs and troubleshooting: linux/cli/logs-troubleshooting.md
+          - Memory: linux/cli/memory.md
+          - Networking: linux/cli/networking.md
+          - Permissions: linux/cli/permissions.md
+          - Pipes and redirection: linux/cli/pipes-redirection.md
+          - proc filesystem: linux/cli/proc-filesystem.md
+          - Processes: linux/cli/processes.md
+          - rsync: linux/cli/rsync.md
+          - sed: linux/cli/sed.md
+          - Signals: linux/cli/signals.md
+          - SSH: linux/cli/ssh.md
+          - systemd: linux/cli/systemd.md
+          - tar, gzip, and ZIP: linux/cli/tar-gzip-zip.md
+          - Users and groups: linux/cli/users-groups.md
+          - xargs: linux/cli/xargs.md
