@@ -32,7 +32,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: docs
-          image: jammyuk/thejammyproject-docs@sha256:51543571b9e170236c7679fa1bcce4d1ffe1d1e2d392b50c901759ce88c9d23e
+          image: jammyuk/thejammyproject-docs@sha256:71c2e4f5e891383a4ffc2c5396d8afe1ebecfdca5dd335464b2e5fb7d756b553
           imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
