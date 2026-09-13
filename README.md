@@ -16,15 +16,3 @@ The website is deployed to my RKE2 Kubernetes cluster using ArgoCD.
 - `deploy/k8s/thejammyproject/current-site.yaml` defines the website containers, internal service, TLS cert, ingress and network policy.
 
 When the Kubernetes manifest changes on the main branch, ArgoCD automatically applies the change and keeps the cluster synchronized with GitHub. The ArgoCD manifest is normally only needed when initially registering or recreating the application.
-
-## Documentation site
-
-`website/docs.thejammyproject.internal` is a separate MkDocs-based knowledge
-site. Its Markdown files build into independent searchable pages and are served
-at `docs.thejammyproject.internal` by their own container and Kubernetes
-deployment.
-
-- `.github/workflows/docs-website.yml` builds and publishes the docs image.
-- `deploy/argocd/docs-thejammyproject.yaml` registers the separate Argo CD app.
-- `deploy/k8s/docs-thejammyproject/docs-site.yaml` defines its workload,
-  service, certificate, ingress, and network policy.
